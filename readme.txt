@@ -2,12 +2,12 @@
 Contributors: coffee2code
 Donate link: http://coffee2code.com/donate
 Tags: text, post content, abbreviations, terms, acronyms, hover, help, coffee2code
-Requires at least: 2.0.2
-Tested up to: 2.5
-Stable tag: 1.0
-Version: 1.0
+Requires at least: 2.6
+Tested up to: 2.8.1
+Stable tag: 2.0
+Version: 2.0
 
-Add hover text to regular text in posts.  Handy for providing explanations of names, terms, phrases, and acronyms mentioned in your blog.
+Add hover text to regular text in posts. Handy for providing explanations of names, terms, phrases, and acronyms mentioned in your blog.
 
 == Description ==
 
@@ -25,8 +25,8 @@ The Scooby Shack => the bar where the gang hangs out`
 
 1. Unzip `text-hover.zip` inside the `/wp-content/plugins/` directory, or upload `text-hover.php` there
 1. Activate the plugin through the 'Plugins' admin menu in WordPress
-1. Go to the Options -> Text Hover (or in WP 2.5: Settings -> Text Hover) admin options page.  Optionally customize the options (namely to define the terms/acronyms and their explanations).
-1. Use the terms/acronyms in a post (terms/acronyms appearing in existing posts will also be affected by this plugin).
+1. Go to the `Settings` -> `Text Hover` admin settings page and customize the settings (namely to define the terms/acronyms and their explanations).
+1. Use the terms/acronyms in posts and/or pages (terms/acronyms appearing in existing posts will also be affected by this plugin)
 
 == Frequently Asked Questions ==
 
@@ -51,9 +51,16 @@ The plugin filters the post content and post excerpt fields.
 
 = Is the plugin case sensitive? =
 
-By default, yes.  You can change this by manually editing the plugin file and changing the argument to the function `c2c_text_hover()` from `$case_sensitive=true` to `$case_sensitive=false`
+By default, yes.  You can change this behavior via the plugin's settings page.  Note that the option applies to all terms/acronyms.  If you want selectively have terms/acronyms be case insensitive, you should leave the case sensitive setting checked and add a listing for each case variation you wish to support.
 
 == Screenshots ==
 
 1. A screenshot of the admin options page for the plugin, where you define the terms/acronyms/phrases and their related hover text
 2. A screenshot of the plugin in action for a post when the mouse is hovering over a defined hover text term
+
+== Changelog ==
+
+= 2.0 =
+
+= 1.0 =
+* Initial release
