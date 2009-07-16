@@ -61,6 +61,12 @@ By default, yes.  You can change this behavior via the plugin's settings page.  
 == Changelog ==
 
 = 2.0 =
+* Encapsulated all functionality into its own class
+* Added 'Settings' link to plugin's plugin listing entry
+* Noted compatibility with WP2.8+
+* Dropped support for pre-WP2.6
+* Updated screenshots
+* Updated copyright date
 
 = 1.0 =
 * Initial release
