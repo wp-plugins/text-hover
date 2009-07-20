@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Text Hover
-Version: 2.0
+Version: 2.1-beta
 Plugin URI: http://coffee2code.com/wp-plugins/text-hover
 Author: Scott Reilly
 Author URI: http://coffee2code.com
@@ -53,7 +53,7 @@ class TextHover {
 					"WP" => "WordPress"
 				), 'label' => '',
 				'help' => '',
-				'input_attributes' => 'style="width: 98%; font-family: \"Courier New\", Courier, mono;" rows="5" cols="40"'
+				'input_attributes' => 'style="width: 98%; font-family: \"Courier New\", Courier, mono;" rows="15" cols="40"'
 			),
 			'case_sensitive' => array('input' => 'checkbox', 'default' => true,
 				'label' => 'Should the matching of terms/acronyms be case sensitive?',
@@ -278,16 +278,13 @@ END;
 		$oldchars = array("(", ")", "[", "]", "?", ".", ",", "|", "\$", "*", "+", "^", "{", "}");
 		$newchars = array("\(", "\)", "\[", "\]", "\?", "\.", "\,", "\|", "\\\$", "\*", "\+", "\^", "\{", "\}");
 		$options = $this->get_options();
-		$text_to_hover = $options['text_to_hover'];
 		$text = ' ' . $text . ' ';
-		if ( !empty($text_to_hover) ) {
-			foreach ( $text_to_hover as $old_text => $hover_text ) {
-				$old_text = stripslashes(str_replace($oldchars, $newchars, $old_text));
-				// WILL match string within string, but WON'T match within tags
-				$preg_flags = ($case_sensitive) ? 's' : 'si';
-				$new_text = "$1<acronym title='" . htmlspecialchars($hover_text, ENT_QUOTES) . "'>$old_text</acronym>$2";
-				$text = preg_replace("|(\s)$old_text([\s\?\!\.\,\-\+\]\)\}])+|$preg_flags", $new_text, $text);
-			}
+		foreach ( (array)$options['text_to_hover'] as $old_text => $hover_text ) {
+			$old_text = stripslashes(str_replace($oldchars, $newchars, $old_text));
+			// WILL match string within string, but WON'T match within tags
+			$preg_flags = ($case_sensitive) ? 's' : 'si';
+			$new_text = "$1<acronym title='" . attribute_escape($hover_text) . "'>$old_text</acronym>$2";
+			$text = preg_replace("|([\s\'\"\.\(\[\{])$old_text([\s\'\"\?\!\.\,\-\+\]\)\}])|$preg_flags", $new_text, $text);
 		}
 		return trim($text);
 	} //end text_hover()
