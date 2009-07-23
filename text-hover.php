@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Text Hover
-Version: 2.1-beta
+Version: 2.1-beta2
 Plugin URI: http://coffee2code.com/wp-plugins/text-hover
 Author: Scott Reilly
 Author URI: http://coffee2code.com
@@ -284,7 +284,7 @@ END;
 			// WILL match string within string, but WON'T match within tags
 			$preg_flags = ($case_sensitive) ? 's' : 'si';
 			$new_text = "$1<acronym title='" . attribute_escape($hover_text) . "'>$old_text</acronym>$2";
-			$text = preg_replace("|([\s\'\"\.\(\[\{])$old_text([\s\'\"\?\!\.\,\-\+\]\)\}])|$preg_flags", $new_text, $text);
+			$text = preg_replace("|([\s\'\"\.\x98\x99\x9c\x9d\xCB\x9C\xE2\x84\xA2\xC5\x93\xEF\xBF\xBD\(\[\{])$old_text([\s\'\"\x98\x99\x9c\x9d\xCB\x9C\xE2\x84\xA2\xC5\x93\xEF\xBF\xBD\?\!\.\,\-\+\]\)\}])|$preg_flags", $new_text, $text);
 		}
 		return trim($text);
 	} //end text_hover()
