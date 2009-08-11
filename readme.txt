@@ -3,9 +3,9 @@ Contributors: coffee2code
 Donate link: http://coffee2code.com/donate
 Tags: text, post content, abbreviations, terms, acronyms, hover, help, coffee2code
 Requires at least: 2.6
-Tested up to: 2.8.1
-Stable tag: 2.0
-Version: 2.0
+Tested up to: 2.8.3
+Stable tag: 2.2
+Version: 2.2
 
 Add hover text to regular text in posts. Handy for providing explanations of names, terms, phrases, and acronyms mentioned in your blog.
 
@@ -19,7 +19,7 @@ Hover text are defined as terms/acronyms/phrasees that you expect to use in your
 Matt => Matt Mullenweg
 The Scooby Shack => the bar where the gang hangs out`
 
-**Note:** This is not the same as my Text Replace plugin, which defines terms which you would use but that you want replaced by the associated replacement text when displayed on your blog.  Text Hover adds the hover text as additional information for when visitors hover over the term, which is otherwise displayed in the post as you typed it.
+**Note:** This is not the same as my (Text Replace)[http://wordpress.org/extend/plugins/text-replace] plugin, which defines terms which you would use but that you want replaced by the associated replacement text when displayed on your blog.  Text Hover adds the hover text as additional information for when visitors hover over the term, which is otherwise displayed in the post as you typed it.
 
 == Installation ==
 
@@ -51,7 +51,7 @@ The plugin filters the post content and post excerpt fields.
 
 = Is the plugin case sensitive? =
 
-By default, yes.  You can change this behavior via the plugin's settings page.  Note that the option applies to all terms/acronyms.  If you want selectively have terms/acronyms be case insensitive, you should leave the case sensitive setting checked and add a listing for each case variation you wish to support.
+By default, yes.  You can change this behavior via the plugin's settings page.  Note that the option applies to all terms/acronyms.  If you want to selectively have terms/acronyms be case insensitive, you should leave the case sensitive setting checked and add a listing for each case variation you wish to support.
 
 == Screenshots ==
 
@@ -59,6 +59,20 @@ By default, yes.  You can change this behavior via the plugin's settings page.  
 2. A screenshot of the plugin in action for a post when the mouse is hovering over a defined hover text term
 
 == Changelog ==
+
+= 2.2 =
+* Fixed bug that allowed text within tag attributes to be potentially replaced
+* Fixed bug that prevented case sensitivity-related option from being taken into account
+* Removed 'case_sensitive' argument from text_replace() function since it is controlled by a setting
+* Changed pattern matching criteria to allow text-to-be-hovered to be book-ended on either side with single or double quotes (either plain or curly), square brackets, curly braces, or parentheses
+* Added ability to filter text hover shortcuts via 'c2c_text_hover_option_text_to_hover'
+* Changed the number of rows for textarea input from 5 to 15
+* Changed plugin_basename to be a class variable initialized during constructor
+* Removed use of single-use temp variable (and instead directly used the value it was holding)
+* Minor code reformatting (mostly spacing)
+
+= 2.1 =
+* (Privately released betas previewing features released as part of v2.2)
 
 = 2.0 =
 * Encapsulated all functionality into its own class

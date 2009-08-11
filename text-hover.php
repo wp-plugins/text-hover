@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Text Hover
-Version: 2.1-beta2
+Version: 2.2
 Plugin URI: http://coffee2code.com/wp-plugins/text-hover
 Author: Scott Reilly
 Author URI: http://coffee2code.com
@@ -16,7 +16,8 @@ INSTALLATION:
 
 1. Download the file http://coffee2code.com/wp-plugins/text-hover.zip and unzip it into your /wp-content/plugins/ directory.
 2. Activate the plugin through the 'Plugins' admin menu in WordPress
-3. Go to the Settings -> Text Hover admin settings page and customize the settings (namely to define the terms/acronyms and their explanations).
+3. Go to the Settings -> Text Hover admin settings page (which you can also get to via the Settings link next to the plugin on
+the Manage Plugins page) and customize the settings (namely to define the terms/acronyms and their explanations).
 4. Use the terms/acronyms in posts and/or pages (terms/acronyms appearing in existing posts will also be affected by this plugin)
 
 */
@@ -45,8 +46,14 @@ class TextHover {
 	var $show_admin = true;	// Change this to false if you don't want the plugin's admin page shown.
 	var $config = array();
 	var $options = array(); // Don't use this directly
+	var $plugin_basename = '';
+	var $plugin_name = '';
+	var $menu_name = '';
 
 	function TextHover() {
+		$this->plugin_basename = plugin_basename(__FILE__);
+		$this->plugin_name = __('Text Hover');
+		$this->menu_name = __('Text Hover', 'text-hover');
 		$this->config = array(
 			// input can be 'checkbox', 'text', 'textarea', 'hidden', or 'none'
 			'text_to_hover' => array('input' => 'textarea', 'datatype' => 'hash', 'default' => array(
@@ -72,22 +79,18 @@ class TextHover {
 	}
 
 	function admin_menu() {
-		static $plugin_basename;
 		if ( $this->show_admin ) {
 			global $wp_version;
 			if ( current_user_can('manage_options') ) {
-				$plugin_basename = plugin_basename(__FILE__); 
 				if ( version_compare( $wp_version, '2.6.999', '>' ) )
-					add_filter( 'plugin_action_links_' . $plugin_basename, array(&$this, 'plugin_action_links') );
-				add_options_page(__('Text Hover', 'text-hover'), __('Text Hover', 'text-hover'), 9, $plugin_basename, array(&$this, 'options_page'));
+					add_filter( 'plugin_action_links_' . $this->plugin_basename, array(&$this, 'plugin_action_links') );
+				add_options_page($this->menu_name, $this->menu_name, 9, $this->plugin_basename, array(&$this, 'options_page'));
 			}
 		}
 	}
 
 	function plugin_action_links( $action_links ) {
-		static $plugin_basename;
-		if ( !$plugin_basename ) $plugin_basename = plugin_basename(__FILE__); 
-		$settings_link = '<a href="options.php?page='.$plugin_basename.'">' . __('Settings', 'text-hover') . '</a>';
+		$settings_link = '<a href="options.php?page='.$this->plugin_basename.'">' . __('Settings') . '</a>';
 		array_unshift( $action_links, $settings_link );
 
 		return $action_links;
@@ -110,25 +113,23 @@ class TextHover {
 	}
 
 	function options_page() {
-		static $plugin_basename;
-		if ( !$plugin_basename ) $plugin_basename = plugin_basename(__FILE__); 
 		$options = $this->get_options();
 		// See if user has submitted form
 		if ( isset($_POST['submitted']) ) {
 			check_admin_referer($this->nonce_field);
 
-			foreach (array_keys($options) AS $opt) {
+			foreach ( array_keys($options) AS $opt ) {
 				$options[$opt] = $_POST[$opt];
-				if (($this->config[$opt]['input'] == 'checkbox') && !$options[$opt])
+				if ( ($this->config[$opt]['input'] == 'checkbox') && !$options[$opt] )
 					$options[$opt] = 0;
-				if ($this->config[$opt]['datatype'] == 'array')
+				if ( $this->config[$opt]['datatype'] == 'array' )
 					$options[$opt] = explode(',', str_replace(array(', ', ' ', ','), ',', $options[$opt]));
-				elseif ($this->config[$opt]['datatype'] == 'hash') {
+				elseif ( $this->config[$opt]['datatype'] == 'hash' ) {
 					if ( !empty($options[$opt]) ) {
 						$new_values = array();
-						foreach (explode("\n", $options[$opt]) AS $line) {
+						foreach ( explode("\n", $options[$opt]) AS $line ) {
 							list($shortcut, $text) = array_map('trim', explode("=>", $line, 2));
-							if (!empty($shortcut)) $new_values[str_replace('\\', '', $shortcut)] = str_replace('\\', '', $text);
+							if ( !empty($shortcut) ) $new_values[str_replace('\\', '', $shortcut)] = str_replace('\\', '', $text);
 						}
 						$options[$opt] = $new_values;
 					}
@@ -137,16 +138,16 @@ class TextHover {
 			// Remember to put all the other options into the array or they'll get lost!
 			update_option($this->admin_options_name, $options);
 
-			echo "<div id='message' class='updated fade'><p><strong>" . __('Settings saved', 'text-hover') . '</strong></p></div>';
+			echo "<div id='message' class='updated fade'><p><strong>" . __('Settings saved.', 'text-hover') . '</strong></p></div>';
 		}
 
-		$action_url = $_SERVER[PHP_SELF] . '?page=' . $plugin_basename;
+		$action_url = $_SERVER[PHP_SELF] . '?page=' . $this->plugin_basename;
 		$logo = plugins_url() . '/' . basename($_GET['page'], '.php') . '/c2c_minilogo.png';
 
 		echo <<<END
 		<div class='wrap'>
 			<div class='icon32' style='width:44px;'><img src='$logo' alt='A plugin by coffee2code' /><br /></div>
-			<h2>Text Hover Settings</h2>
+			<h2>{$this->plugin_name} Settings</h2>
 			<p>Text Hover is a plugin that allows you to add hover text for text in posts.
 			   Very handy to create hover explanations of people mentioned in your blog, and/or
 			   definitions of unique acronyms and terms you use. </p>
@@ -175,49 +176,49 @@ class TextHover {
 END;
 				wp_nonce_field($this->nonce_field);
 		echo '<table width="100%" cellspacing="2" cellpadding="5" class="optiontable editform form-table">';
-				foreach (array_keys($options) as $opt) {
+				foreach ( array_keys($options) as $opt ) {
 					$input = $this->config[$opt]['input'];
-					if ($input == 'none') continue;
+					if ( $input == 'none' ) continue;
 					$label = $this->config[$opt]['label'];
 					$value = $options[$opt];
-					if ($input == 'checkbox') {
+					if ( $input == 'checkbox' ) {
 						$checked = ($value == 1) ? 'checked=checked ' : '';
 						$value = 1;
 					} else {
 						$checked = '';
 					};
-					if ($this->config[$opt]['datatype'] == 'array') {
-						if (!is_array($value))
+					if ( $this->config[$opt]['datatype'] == 'array' ) {
+						if ( !is_array($value) )
 							$value = '';
 						else {
-							if ($input == 'textarea' || $input == 'inline_textarea')
+							if ( $input == 'textarea' || $input == 'inline_textarea' )
 								$value = implode("\n", $value);
 							else
 								$value = implode(', ', $value);
 						}
-					} elseif ($this->config[$opt]['datatype'] == 'hash') {
-						if (!is_array($value))
+					} elseif ( $this->config[$opt]['datatype'] == 'hash' ) {
+						if ( !is_array($value) )
 							$value = '';
 						else {
 							$new_value = '';
-							foreach ($value AS $shortcut => $replacement) {
+							foreach ( $value AS $shortcut => $replacement ) {
 								$new_value .= "$shortcut => $replacement\n";
 							}
 							$value = $new_value;
 						}
 					}
 					echo "<tr valign='top'>";
-					if ($input == 'textarea') {
+					if ( $input == 'textarea' ) {
 						echo "<td colspan='2'>";
-						if ($label) echo "<strong>$label</strong><br />";
+						if ( $label ) echo "<strong>$label</strong><br />";
 						echo "<textarea name='$opt' id='$opt' {$this->config[$opt]['input_attributes']}>" . $value . '</textarea>';
 					} else {
 						echo "<th scope='row'>$label</th><td>";
-						if ($input == "inline_textarea")
+						if ( $input == 'inline_textarea' )
 							echo "<textarea name='$opt' id='$opt' {$this->config[$opt]['input_attributes']}>" . $value . '</textarea>';
-						elseif ($input == 'select') {
+						elseif ( $input == 'select' ) {
 							echo "<select name='$opt' id='$opt'>";
-							foreach ($this->config[$opt]['options'] as $sopt) {
+							foreach ( $this->config[$opt]['options'] as $sopt ) {
 								$selected = $value == $sopt ? " selected='selected'" : '';
 								echo "<option value='$sopt'$selected>$sopt</option>";
 							}
@@ -225,7 +226,7 @@ END;
 						} else
 							echo "<input name='$opt' type='$input' id='$opt' value='$value' $checked {$this->config[$opt]['input_attributes']} />";
 					}
-					if ($this->config[$opt]['help']) {
+					if ( $this->config[$opt]['help'] ) {
 						echo "<br /><span style='color:#777; font-size:x-small;'>";
 						echo $this->config[$opt]['help'];
 						echo "</span>";
@@ -274,17 +275,18 @@ END;
 END;
 	}
 
-	function text_hover( $text, $case_sensitive=true ) {
+	function text_hover( $text ) {
 		$oldchars = array("(", ")", "[", "]", "?", ".", ",", "|", "\$", "*", "+", "^", "{", "}");
 		$newchars = array("\(", "\)", "\[", "\]", "\?", "\.", "\,", "\|", "\\\$", "\*", "\+", "\^", "\{", "\}");
 		$options = $this->get_options();
 		$text = ' ' . $text . ' ';
-		foreach ( (array)$options['text_to_hover'] as $old_text => $hover_text ) {
+		$text_to_hover = apply_filters($this->admin_options_name.'_option_text_to_hover', $options['text_to_hover']);
+		foreach ( $text_to_hover as $old_text => $hover_text ) {
 			$old_text = stripslashes(str_replace($oldchars, $newchars, $old_text));
 			// WILL match string within string, but WON'T match within tags
-			$preg_flags = ($case_sensitive) ? 's' : 'si';
-			$new_text = "$1<acronym title='" . attribute_escape($hover_text) . "'>$old_text</acronym>$2";
-			$text = preg_replace("|([\s\'\"\.\x98\x99\x9c\x9d\xCB\x9C\xE2\x84\xA2\xC5\x93\xEF\xBF\xBD\(\[\{])$old_text([\s\'\"\x98\x99\x9c\x9d\xCB\x9C\xE2\x84\xA2\xC5\x93\xEF\xBF\xBD\?\!\.\,\-\+\]\)\}])|$preg_flags", $new_text, $text);
+			$preg_flags = ($options['case_sensitive']) ? 's' : 'si';
+			$new_text = "$1<acronym title='" . attribute_escape($hover_text) . "'>$2</acronym>$3";
+			$text = preg_replace("|(?!<.*?)([\s\'\"\.\x98\x99\x9c\x9d\xCB\x9C\xE2\x84\xA2\xC5\x93\xEF\xBF\xBD\(\[\{])($old_text)([\s\'\"\x98\x99\x9c\x9d\xCB\x9C\xE2\x84\xA2\xC5\x93\xEF\xBF\xBD\?\!\.\,\-\+\]\)\}])(?![^<>]*?>)|$preg_flags", $new_text, $text);
 		}
 		return trim($text);
 	} //end text_hover()
