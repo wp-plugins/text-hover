@@ -2,7 +2,7 @@
 /**
  * @package C2C_Plugins
  * @author Scott Reilly
- * @version 015
+ * @version 016
  */
 /*
 Basis for other plugins
@@ -32,9 +32,9 @@ LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRA
 IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-if ( !class_exists( 'C2C_Plugin_015' ) ) :
+if ( !class_exists( 'C2C_Plugin_016' ) ) :
 
-class C2C_Plugin_015 {
+class C2C_Plugin_016 {
 	var $plugin_css_version = '006';
 	var $options = array();
 	var $option_names = array();
@@ -52,7 +52,7 @@ class C2C_Plugin_015 {
 	 * @param array $plugin_options (optional) Array specifying further customization of plugin configuration.
 	 * @return void
 	 */
-	function C2C_Plugin_015( $version, $id_base, $author_prefix, $file, $plugin_options = array() ) {
+	function C2C_Plugin_016( $version, $id_base, $author_prefix, $file, $plugin_options = array() ) {
 		global $pagenow;
 		$id_base = sanitize_title( $id_base );
 		if ( !file_exists( $file ) )
@@ -123,6 +123,15 @@ class C2C_Plugin_015 {
 	function uninstall() {
 		delete_option( $this->admin_options_name );
 	}
+
+	/**
+	 * Handles deactivation tasks
+	 *
+	 * This should be overridden.
+	 *
+	 * @return void
+	 */
+	function deactivate() { }
 
 	/**
 	 * Handles actions to be hooked to 'init' action, such as loading text domain and loading plugin config data array.
@@ -358,10 +367,10 @@ class C2C_Plugin_015 {
 	 *
 	 * @param string $contextual_help The default contextual help
 	 * @param int $screen_id The screen ID
-	 * @param object $screen The screen object
+	 * @param object $screen The screen object (only supplied in WP 3.0)
 	 * @return void (Text is echoed)
 	 */
-	function contextual_help( $contextual_help, $screen_id, $screen ) {
+	function contextual_help( $contextual_help, $screen_id, $screen = null ) {
 		if ( $screen_id != $this->options_page )
 			return $contextual_help;
 

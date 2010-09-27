@@ -4,8 +4,8 @@ Donate link: http://coffee2code.com/donate
 Tags: text, post content, abbreviations, terms, acronyms, hover, help, coffee2code
 Requires at least: 2.8
 Tested up to: 3.0.1
-Stable tag: 3.0
-Version: 3.0
+Stable tag: 3.0.1
+Version: 3.0.1
 
 Add hover text to regular text in posts. Handy for providing explanations of names, terms, phrases, and acronyms mentioned in your blog.
 
@@ -126,6 +126,9 @@ add_filter( 'c2c_text_hover_case_sensitive', '__return_false' );`
 
 
 == Changelog ==
+
+= 3.0.1 =
+* Update plugin framework to 016
 
 = 3.0 =
 * Re-implementation by extending C2C_Plugin_015, which among other things adds support for:

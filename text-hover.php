@@ -2,11 +2,11 @@
 /**
  * @package Text_Hover
  * @author Scott Reilly
- * @version 3.0
+ * @version 3.0.1
  */
 /*
 Plugin Name: Text Hover
-Version: 3.0
+Version: 3.0.1
 Plugin URI: http://coffee2code.com/wp-plugins/text-hover/
 Author: Scott Reilly
 Author URI: http://coffee2code.com
@@ -42,7 +42,7 @@ if ( !class_exists( 'c2c_TextHover' ) ) :
 
 require_once( 'c2c-plugin.php' );
 
-class c2c_TextHover extends C2C_Plugin_015 {
+class c2c_TextHover extends C2C_Plugin_016 {
 
 	/**
 	 * Handles installation tasks, such as ensuring plugin options are instantiated and saved to options table.
@@ -50,7 +50,7 @@ class c2c_TextHover extends C2C_Plugin_015 {
 	 * @return void
 	 */
 	function c2c_TextHover() {
-		$this->C2C_Plugin_015( '3.0', 'text-hover', 'c2c', __FILE__, array() );
+		$this->C2C_Plugin_016( '3.0.1', 'text-hover', 'c2c', __FILE__, array() );
 	}
 
 	/**
