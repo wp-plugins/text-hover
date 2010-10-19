@@ -2,7 +2,7 @@
 /**
  * @package C2C_Plugins
  * @author Scott Reilly
- * @version 016
+ * @version 018
  */
 /*
 Basis for other plugins
@@ -32,10 +32,10 @@ LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRA
 IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-if ( !class_exists( 'C2C_Plugin_016' ) ) :
+if ( !class_exists( 'C2C_Plugin_018' ) ) :
 
-class C2C_Plugin_016 {
-	var $plugin_css_version = '006';
+class C2C_Plugin_018 {
+	var $plugin_css_version = '007';
 	var $options = array();
 	var $option_names = array();
 	var $required_config = array( 'menu_name', 'name' );
@@ -52,7 +52,7 @@ class C2C_Plugin_016 {
 	 * @param array $plugin_options (optional) Array specifying further customization of plugin configuration.
 	 * @return void
 	 */
-	function C2C_Plugin_016( $version, $id_base, $author_prefix, $file, $plugin_options = array() ) {
+	function C2C_Plugin_018( $version, $id_base, $author_prefix, $file, $plugin_options = array() ) {
 		global $pagenow;
 		$id_base = sanitize_title( $id_base );
 		if ( !file_exists( $file ) )
@@ -432,7 +432,7 @@ class C2C_Plugin_016 {
 		.c2c-fieldset {border:1px solid #ccc; padding:2px 8px;}
 		.c2c-textarea, .c2c-inline_textarea {width:95%;font-family:"Courier New", Courier, mono;}
 		.c2c-nowrap {
-			white-space:nowrap;overflow:scroll;overflow-y:hidden;overflow-x:scroll;overflow:-moz-scrollbars-horizontal
+			white-space:nowrap;overflow:auto;
 		}
 		.see-help {font-size:x-small;font-style:italic;}
 		.more-help {display:block;margin-top:8px;}
@@ -677,8 +677,8 @@ CSS;
 			echo '</fieldset>';
 		} elseif ( $input == 'checkbox' ) {
 			echo "<input type='$input' $attribs value='1' " . checked( $value, 1, false ) . " />\n";
-		} else {
-			echo "<input type='text' $attribs value='" . esc_attr( $value ) . "' />\n";
+		} else { // Only 'text' and 'password' should fall through to here.
+			echo "<input type='$input' $attribs value='" . esc_attr( $value ) . "' />\n";
 		}
 		if ( $help = apply_filters( $this->get_hook( 'option_help'), $this->config[$opt]['help'], $opt ) )
 			echo "<br /><span class='c2c-input-help'>$help</span>\n";
