@@ -2,18 +2,18 @@
 /**
  * @package Text_Hover
  * @author Scott Reilly
- * @version 3.0.2
+ * @version 3.0.3
  */
 /*
 Plugin Name: Text Hover
-Version: 3.0.2
+Version: 3.0.3
 Plugin URI: http://coffee2code.com/wp-plugins/text-hover/
 Author: Scott Reilly
 Author URI: http://coffee2code.com
 Text Domain: text-hover
 Description: Add hover text to regular text in posts. Handy for providing explanations of names, terms, phrases, and acronyms mentioned in your blog.
 
-Compatible with WordPress 2.8+, 2.9+, 3.0+.
+Compatible with WordPress 2.8+, 2.9+, 3.0+, 3.1+.
 
 =>> Read the accompanying readme.txt file for instructions and documentation.
 =>> Also, visit the plugin's homepage for additional information and updates.
@@ -22,7 +22,7 @@ Compatible with WordPress 2.8+, 2.9+, 3.0+.
 */
 
 /*
-Copyright (c) 2007-2010 by Scott Reilly (aka coffee2code)
+Copyright (c) 2007-2011 by Scott Reilly (aka coffee2code)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation
 files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy,
@@ -42,15 +42,27 @@ if ( !class_exists( 'c2c_TextHover' ) ) :
 
 require_once( 'c2c-plugin.php' );
 
-class c2c_TextHover extends C2C_Plugin_018 {
+class c2c_TextHover extends C2C_Plugin_021 {
 
 	/**
 	 * Handles installation tasks, such as ensuring plugin options are instantiated and saved to options table.
 	 *
 	 * @return void
 	 */
-	function c2c_TextHover() {
-		$this->C2C_Plugin_018( '3.0.2', 'text-hover', 'c2c', __FILE__, array() );
+	public function c2c_TextHover() {
+		$this->C2C_Plugin_021( '3.0.3', 'text-hover', 'c2c', __FILE__, array() );
+		register_uninstall_hook( __FILE__, array( __CLASS__, 'uninstall' ) );
+	}
+
+	/**
+	 * Handles uninstallation tasks, such as deleting plugin options.
+	 *
+	 * This can be overridden.
+	 *
+	 * @return void
+	 */
+	public function uninstall() {
+		delete_option( 'c2c_text_hover' );
 	}
 
 	/**
@@ -58,7 +70,7 @@ class c2c_TextHover extends C2C_Plugin_018 {
 	 *
 	 * @return void
 	 */
-	function register_filters() {
+	public function register_filters() {
 		$filters = apply_filters( 'c2c_text_hover_filters', array( 'the_content', 'get_the_excerpt', 'widget_text' ) );
 		foreach ( (array) $filters as $filter )
 			add_filter( $filter, array( &$this, 'text_hover' ), 3 );
@@ -69,7 +81,7 @@ class c2c_TextHover extends C2C_Plugin_018 {
 	 *
 	 * @return void
 	 */
-	function load_config() {
+	public function load_config() {
 		$this->name = __( 'Text Hover', $this->textdomain );
 		$this->menu_name = __( 'Text Hover', $this->textdomain );
 
@@ -91,7 +103,7 @@ class c2c_TextHover extends C2C_Plugin_018 {
 	 *
 	 * @return void (Text will be echoed.)
 	 */
-	function options_page_description() {
+	public function options_page_description() {
 		parent::options_page_description( __( 'Text Hover Settings', $this->textdomain ) );
 
 		echo '<p>' . __( 'Text Hover is a plugin that allows you to add hover text for text in posts. Very handy to create hover explanations of people mentioned in your blog, and/or definitions of unique acronyms and terms you use.', $this->textdomain ) . '</p>';
@@ -120,7 +132,7 @@ class c2c_TextHover extends C2C_Plugin_018 {
 	 * @param string $text Text to be processed for text hovers
 	 * @return string Text with hovertexts already processed
 	 */
-	function text_hover( $text ) {
+	public function text_hover( $text ) {
 		$oldchars = array( "(", ")", "[", "]", "?", ".", ",", "|", "\$", "*", "+", "^", "{", "}" );
 		$newchars = array( "\(", "\)", "\[", "\]", "\?", "\.", "\,", "\|", "\\\$", "\*", "\+", "\^", "\{", "\}" );
 		$options = $this->get_options();

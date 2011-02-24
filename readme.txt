@@ -3,9 +3,9 @@ Contributors: coffee2code
 Donate link: http://coffee2code.com/donate
 Tags: text, post content, abbreviations, terms, acronyms, hover, help, coffee2code
 Requires at least: 2.8
-Tested up to: 3.0.1
-Stable tag: 3.0.2
-Version: 3.0.2
+Tested up to: 3.1
+Stable tag: 3.0.3
+Version: 3.0.3
 
 Add hover text to regular text in posts. Handy for providing explanations of names, terms, phrases, and acronyms mentioned in your blog.
 
@@ -21,6 +21,8 @@ Matt => Matt Mullenweg
 The Scooby Shack => the bar where the gang hangs out`
 
 **Note:** This is not the same as my [Text Replace](http://wordpress.org/extend/plugins/text-replace) plugin, which defines terms or phrases that you want replaced by replacement text when displayed on your blog.  Text Hover instead adds the hover text as additional information for when visitors hover over the term, which is otherwise displayed in the post as you typed it.
+
+Links: [Plugin Homepage]:(http://coffee2code.com/wp-plugins/text-hover/) | [Author Homepage]:(http://coffee2code.com)
 
 
 == Installation ==
@@ -127,12 +129,19 @@ add_filter( 'c2c_text_hover_case_sensitive', '__return_false' );`
 
 == Changelog ==
 
+= 3.0.3 =
+* Update plugin framework to version 021
+* Delete plugin options upon uninstallation
+* Explicitly declare all class functions public static
+* Note compatibility through WP 3.1+
+* Update copyright date (2011)
+
 = 3.0.2 =
-* Update plugin framework to 018
+* Update plugin framework to version 018
 * Fix so that textarea displays vertical scrollbar when lines exceed visible textarea space
 
 = 3.0.1 =
-* Update plugin framework to 016
+* Update plugin framework to version 016
 
 = 3.0 =
 * Re-implementation by extending C2C_Plugin_015, which among other things adds support for:
@@ -190,7 +199,11 @@ add_filter( 'c2c_text_hover_case_sensitive', '__return_false' );`
 
 == Upgrade Notice ==
 
+= 3.0.3 =
+Trivial update: updated plugin framework to v021; noted compatibility with WP 3.1+ and updated copyright date.
+
 = 3.0.2 =
 Minor plugin framework update and fix so that plugin form's textarea displays vertical scrollbar when lines exceed visible textarea space
+
 = 3.0 =
 Significant and recommended update. Highlights: re-implementation; added more settings and hooks for customization; disable autowrap in textarea; misc improvements; verified WP 3.0 compatibility; dropped compatibility with WP older than 2.8.
