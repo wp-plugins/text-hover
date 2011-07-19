@@ -1,0 +1,166 @@
+# Translation of the WordPress plugin Text Hover 3.0 by Scott Reilly.
+# Copyright (C) 2010 Scott Reilly
+# This file is distributed under the same license as the Text Hover package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Text Hover 3.0\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/text-hover\n"
+"POT-Creation-Date: 2010-09-21 10:46-0400\n"
+"PO-Revision-Date: 2010-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: c2c-plugin.php:59
+#, php-format
+msgid "Invalid file specified for C2C_Plugin: %s"
+msgstr ""
+
+#: c2c-plugin.php:177 c2c-plugin.php:423
+msgid "Settings reset."
+msgstr ""
+
+#: c2c-plugin.php:187
+#, php-format
+msgid "A value is required for: \"%s\""
+msgstr ""
+
+#: c2c-plugin.php:193
+#, php-format
+msgid "Expected integer value for: %s"
+msgstr ""
+
+#: c2c-plugin.php:335
+msgid "Settings"
+msgstr ""
+
+#: c2c-plugin.php:453
+msgid "Settings saved."
+msgstr ""
+
+#: c2c-plugin.php:603
+msgid "A plugin by coffee2code"
+msgstr ""
+
+#: c2c-plugin.php:622
+msgid "Save Changes"
+msgstr ""
+
+#: c2c-plugin.php:623
+msgid "Reset Settings"
+msgstr ""
+
+#: c2c-plugin.php:629
+msgid "Scott Reilly, aka coffee2code"
+msgstr ""
+
+#: c2c-plugin.php:630
+#, php-format
+msgid "This plugin brought to you by %s."
+msgstr ""
+
+#: c2c-plugin.php:631
+msgid "Please consider a donation"
+msgstr ""
+
+#: c2c-plugin.php:632
+msgid "Did you find this plugin useful?"
+msgstr ""
+
+#. #-#-#-#-#  text-hover.pot (Text Hover 3.0)  #-#-#-#-#
+#. Plugin Name of the plugin/theme
+#: text-hover.php:73 text-hover.php:74
+msgid "Text Hover"
+msgstr ""
+
+#: text-hover.php:83
+msgid "Should the matching of terms/acronyms be case sensitive?"
+msgstr ""
+
+#: text-hover.php:84
+msgid ""
+"i.e. if you define a term of 'WP', should 'wp' also be treated the same way? "
+"This setting applies to all terms. If you want to selectively have case "
+"insensitive terms, then leave this option checked and create separate "
+"entries for each variation."
+msgstr ""
+
+#: text-hover.php:95
+msgid "Text Hover Settings"
+msgstr ""
+
+#: text-hover.php:97
+msgid ""
+"Text Hover is a plugin that allows you to add hover text for text in posts. "
+"Very handy to create hover explanations of people mentioned in your blog, "
+"and/or definitions of unique acronyms and terms you use."
+msgstr ""
+
+#: text-hover.php:99
+msgid "Acronyms and hover text"
+msgstr ""
+
+#: text-hover.php:100
+msgid ""
+"Define terms/acronyms and hovertext explanations here.  The format should be "
+"like this:"
+msgstr ""
+
+#: text-hover.php:102
+msgid ""
+"Where <code>WP</code> is the term, acronym, or phrase you intend to use in "
+"your posts, and the <code>WordPress</code> would be what you want to appear "
+"in a hover tooltip when a visitor hovers their mouse over the term."
+msgstr ""
+
+#: text-hover.php:103
+msgid "Other considerations:"
+msgstr ""
+
+#: text-hover.php:105
+msgid ""
+"Terms and acronyms are assumed to be whole words within your posts (i.e. "
+"they are immediately prepended by some sort of space character (space, tab, "
+"etc) and are immediately appended by a space character or punctuation (which "
+"can include any of: ?!.,-+)]})"
+msgstr ""
+
+#: text-hover.php:107
+msgid ""
+"Only use quotes it they are actual part of the original or hovertext strings."
+msgstr ""
+
+#: text-hover.php:109
+msgid "Define only one hovertext per line."
+msgstr ""
+
+#: text-hover.php:111
+msgid "Hovertexts must not span multiple lines."
+msgstr ""
+
+#: text-hover.php:113
+msgid "Don't use HTML in the hovertext."
+msgstr ""
+
+#. Plugin URI of the plugin/theme
+msgid "http://coffee2code.com/wp-plugins/text-hover/"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid ""
+"Add hover text to regular text in posts. Handy for providing explanations of "
+"names, terms, phrases, and acronyms mentioned in your blog."
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "Scott Reilly"
+msgstr ""
+
+#. Author URI of the plugin/theme
+msgid "http://coffee2code.com"
+msgstr ""
