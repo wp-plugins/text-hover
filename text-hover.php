@@ -2,22 +2,26 @@
 /**
  * @package Text_Hover
  * @author Scott Reilly
- * @version 3.0.3
+ * @version 3.1
  */
 /*
 Plugin Name: Text Hover
-Version: 3.0.3
+Version: 3.1
 Plugin URI: http://coffee2code.com/wp-plugins/text-hover/
 Author: Scott Reilly
 Author URI: http://coffee2code.com
 Text Domain: text-hover
 Description: Add hover text to regular text in posts. Handy for providing explanations of names, terms, phrases, and acronyms mentioned in your blog.
 
-Compatible with WordPress 2.8+, 2.9+, 3.0+, 3.1+.
+Compatible with WordPress 3.0+, 3.1+. 3.2+.
 
 =>> Read the accompanying readme.txt file for instructions and documentation.
 =>> Also, visit the plugin's homepage for additional information and updates.
 =>> Or visit: http://wordpress.org/extend/plugins/text-hover/
+
+TODO:
+	* Update screenshots for WP 3.2
+	* Regenerate .pot
 
 */
 
@@ -38,19 +42,41 @@ IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 
-if ( !class_exists( 'c2c_TextHover' ) ) :
+if ( ! class_exists( 'c2c_TextHover' ) ) :
 
 require_once( 'c2c-plugin.php' );
 
-class c2c_TextHover extends C2C_Plugin_021 {
+class c2c_TextHover extends C2C_Plugin_023 {
+
+	public static $instance;
 
 	/**
-	 * Handles installation tasks, such as ensuring plugin options are instantiated and saved to options table.
+	 * Constructor
 	 *
 	 * @return void
 	 */
+	public function __construct() {
+		$this->c2c_TextHover();
+	}
+
 	public function c2c_TextHover() {
-		$this->C2C_Plugin_021( '3.0.3', 'text-hover', 'c2c', __FILE__, array() );
+		// Be a singleton
+		if ( ! is_null( self::$instance ) )
+			return;
+
+		$this->C2C_Plugin_023( '3.1', 'text-hover', 'c2c', __FILE__, array() );
+		register_activation_hook( __FILE__, array( __CLASS__, 'activation' ) );
+		self::$instance = $this;
+	}
+
+	/**
+	 * Handles activation tasks, such as registering the uninstall hook.
+	 *
+	 * @since 3.1
+	 *
+	 * @return void
+	 */
+	public function activation() {
 		register_uninstall_hook( __FILE__, array( __CLASS__, 'uninstall' ) );
 	}
 
@@ -82,7 +108,7 @@ class c2c_TextHover extends C2C_Plugin_021 {
 	 * @return void
 	 */
 	public function load_config() {
-		$this->name = __( 'Text Hover', $this->textdomain );
+		$this->name      = __( 'Text Hover', $this->textdomain );
 		$this->menu_name = __( 'Text Hover', $this->textdomain );
 
 		$this->config = array(
@@ -93,7 +119,7 @@ class c2c_TextHover extends C2C_Plugin_021 {
 			),
 			'case_sensitive' => array( 'input' => 'checkbox', 'default' => true,
 				'label' => __( 'Should the matching of terms/acronyms be case sensitive?', $this->textdomain ),
-				'help' => __( 'i.e. if you define a term of \'WP\', should \'wp\' also be treated the same way? This setting applies to all terms. If you want to selectively have case insensitive terms, then leave this option checked and create separate entries for each variation.', $this->textdomain )
+				'help' => __( 'If checked, then hover text defined for \'WP\' would not apply to \'wp\'. This setting applies to all terms. If you want to selectively have case insensitive terms, then leave this option checked and create separate entries for each variation.', $this->textdomain )
 			)
 		);
 	}
@@ -152,6 +178,8 @@ class c2c_TextHover extends C2C_Plugin_021 {
 
 } // end c2c_TextHover
 
+// NOTICE: The 'c2c_text_hover' global is deprecated and will be removed in the plugin's version 3.2.
+// Instead, use: c2c_TextHover::$instance
 $GLOBALS['c2c_text_hover'] = new c2c_TextHover();
 
 endif; // end if !class_exists()

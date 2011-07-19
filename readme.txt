@@ -2,10 +2,10 @@
 Contributors: coffee2code
 Donate link: http://coffee2code.com/donate
 Tags: text, post content, abbreviations, terms, acronyms, hover, help, coffee2code
-Requires at least: 2.8
-Tested up to: 3.1
-Stable tag: 3.0.3
-Version: 3.0.3
+Requires at least: 3.0
+Tested up to: 3.2
+Stable tag: 3.1
+Version: 3.1
 
 Add hover text to regular text in posts. Handy for providing explanations of names, terms, phrases, and acronyms mentioned in your blog.
 
@@ -22,7 +22,7 @@ The Scooby Shack => the bar where the gang hangs out`
 
 **Note:** This is not the same as my [Text Replace](http://wordpress.org/extend/plugins/text-replace) plugin, which defines terms or phrases that you want replaced by replacement text when displayed on your blog.  Text Hover instead adds the hover text as additional information for when visitors hover over the term, which is otherwise displayed in the post as you typed it.
 
-Links: [Plugin Homepage]:(http://coffee2code.com/wp-plugins/text-hover/) | [Author Homepage]:(http://coffee2code.com)
+Links: [Plugin Homepage](http://coffee2code.com/wp-plugins/text-hover/) | [Author Homepage](http://coffee2code.com)
 
 
 == Installation ==
@@ -129,6 +129,17 @@ add_filter( 'c2c_text_hover_case_sensitive', '__return_false' );`
 
 == Changelog ==
 
+= 3.1 =
+* Fix to properly register activation and uninstall hooks
+* Update plugin framework to version v023
+* Save a static version of itself in class variable $instance
+* Deprecate use of global variable $c2c_text_hover to store instance
+* Add __construct() and activation()
+* Note compatibility through WP 3.2+
+* Drop compatibility with version of WP older than 3.0
+* Minor code formatting changes (spacing)
+* Fix plugin homepage and author links in description in readme.txt
+
 = 3.0.3 =
 * Update plugin framework to version 021
 * Delete plugin options upon uninstallation
@@ -198,6 +209,9 @@ add_filter( 'c2c_text_hover_case_sensitive', '__return_false' );`
 
 
 == Upgrade Notice ==
+
+= 3.1 =
+Recommended update. Highlights: updated compatibility through WP 3.2; dropped compatibility with version of WP older than 3.0; updated plugin framework, bugfix; and more.
 
 = 3.0.3 =
 Trivial update: updated plugin framework to v021; noted compatibility with WP 3.1+ and updated copyright date.
