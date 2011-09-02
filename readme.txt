@@ -5,22 +5,22 @@ Tags: text, post content, abbreviations, terms, acronyms, hover, help, coffee2co
 Requires at least: 3.0
 Tested up to: 3.2
 Stable tag: 3.1
-Version: 3.1
+Version: 3.1.1
 
-Add hover text to regular text in posts. Handy for providing explanations of names, terms, phrases, and acronyms mentioned in your blog.
+Add hover text to regular text in posts. Handy for providing explanations of names, terms, phrases, and acronyms mentioned in posts/pages.
 
 
 == Description ==
 
-Add hover text to regular text in posts.  Handy for providing explanations of names, terms, phrases, and acronyms mentioned in your blog.
+Add hover text to regular text in posts.  Handy for providing explanations of names, terms, phrases, and acronyms mentioned in posts/pages.
 
-Hover text are defined as terms/acronyms/phrasees that you expect to use in your blog posts and the expand text you wish to appear when the visitor hovers their mouse over the term.  The admin options form for the plugin explains the format, which is quite simple.  An example of which is shown here :
+Hover text are defined as terms/acronyms/phrases that you expect to use in your blog posts/pages and the expand text you wish to appear when the visitor hovers their mouse over the term.  The admin options form for the plugin explains the format, which is quite simple.  An example of which is shown here :
 
 `WP => WordPress
 Matt => Matt Mullenweg
 The Scooby Shack => the bar where the gang hangs out`
 
-**Note:** This is not the same as my [Text Replace](http://wordpress.org/extend/plugins/text-replace) plugin, which defines terms or phrases that you want replaced by replacement text when displayed on your blog.  Text Hover instead adds the hover text as additional information for when visitors hover over the term, which is otherwise displayed in the post as you typed it.
+**Note:** This is not the same as my [Text Replace](http://wordpress.org/extend/plugins/text-replace) plugin, which defines terms or phrases that you want replaced by replacement text when displayed on your site.  Text Hover instead adds the hover text as additional information for when visitors hover over the term, which is otherwise displayed in the post as you typed it.
 
 Links: [Plugin Homepage](http://coffee2code.com/wp-plugins/text-hover/) | [Author Homepage](http://coffee2code.com)
 
@@ -129,9 +129,17 @@ add_filter( 'c2c_text_hover_case_sensitive', '__return_false' );`
 
 == Changelog ==
 
+= 3.1.1 =
+* Fix cross-browser (namely IE) handling of non-wrapping textarea text (flat out can't use CSS for it)
+* Update plugin framework to version 028
+* Change parent constructor invocation
+* Create 'lang' subdirectory and move .pot file into it
+* Regenerate .pot
+* Tweaked description
+
 = 3.1 =
 * Fix to properly register activation and uninstall hooks
-* Update plugin framework to version v023
+* Update plugin framework to version 023
 * Save a static version of itself in class variable $instance
 * Deprecate use of global variable $c2c_text_hover to store instance
 * Add __construct() and activation()
@@ -209,6 +217,9 @@ add_filter( 'c2c_text_hover_case_sensitive', '__return_false' );`
 
 
 == Upgrade Notice ==
+
+= 3.1.1 =
+Bugfix release: fixed bug with cross-browser (mainly, IE) handling of non-wrapping textarea text; updated plugin framework; regenerated .pot file and put it into 'lang' subdirectory.
 
 = 3.1 =
 Recommended update. Highlights: updated compatibility through WP 3.2; dropped compatibility with version of WP older than 3.0; updated plugin framework, bugfix; and more.
