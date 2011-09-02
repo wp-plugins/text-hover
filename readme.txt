@@ -4,7 +4,7 @@ Donate link: http://coffee2code.com/donate
 Tags: text, post content, abbreviations, terms, acronyms, hover, help, coffee2code
 Requires at least: 3.0
 Tested up to: 3.2
-Stable tag: 3.1
+Stable tag: 3.1.1
 Version: 3.1.1
 
 Add hover text to regular text in posts. Handy for providing explanations of names, terms, phrases, and acronyms mentioned in posts/pages.
