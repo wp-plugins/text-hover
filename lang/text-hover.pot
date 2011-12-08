@@ -1,10 +1,11 @@
-# Copyright (C) 2007-2011 Scott Reilly
-# This file is distributed under the same license as the Text Hover package.
+# Translation of the WordPress plugin Text Hover v3.2 by Scott Reilly.
+# Copyright (C) 2011 Scott Reilly
+# This file is distributed under the same license as the Text Hover plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Text Hover 3.1.1\n"
+"Project-Id-Version: Text Hover 3.2\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/text-hover\n"
-"POT-Creation-Date: 2011-09-01 18:44:07+00:00\n"
+"POT-Creation-Date: 2011-12-07 05:29:24+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -12,81 +13,89 @@ msgstr ""
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 
-#: c2c-plugin.php:77
+#: c2c-plugin.php:76
 msgid "Invalid file specified for C2C_Plugin: %s"
 msgstr ""
 
-#: c2c-plugin.php:306
-msgid "Settings reset."
-msgstr ""
-
-#: c2c-plugin.php:317 c2c-plugin.php:325
-msgid "A value is required for: \"%s\""
-msgstr ""
-
-#: c2c-plugin.php:334
-msgid "Expected integer value for: %s"
-msgstr ""
-
-#: c2c-plugin.php:445
-msgid "More information about %1$s %2$s"
-msgstr ""
-
-#: c2c-plugin.php:446
-msgid "Click for more help on this plugin"
-msgstr ""
-
-#: c2c-plugin.php:447
-msgid " (especially check out the \"Other Notes\" tab, if present)"
-msgstr ""
-
-#: c2c-plugin.php:537
-msgid "Settings"
-msgstr ""
-
-#: c2c-plugin.php:771
+#: c2c-plugin.php:284
 msgid "See the \"Help\" link to the top-right of the page for more help."
 msgstr ""
 
-#: c2c-plugin.php:792
+#: c2c-plugin.php:317
+msgid "Settings reset."
+msgstr ""
+
+#: c2c-plugin.php:328 c2c-plugin.php:336
+msgid "A value is required for: \"%s\""
+msgstr ""
+
+#: c2c-plugin.php:345
+msgid "Expected integer value for: %s"
+msgstr ""
+
+#: c2c-plugin.php:456
+msgid "More information about %1$s %2$s"
+msgstr ""
+
+#: c2c-plugin.php:457
+msgid "Click for more help on this plugin"
+msgstr ""
+
+#: c2c-plugin.php:458
+msgid " (especially check out the \"Other Notes\" tab, if present)"
+msgstr ""
+
+#: c2c-plugin.php:547
+msgid "Settings"
+msgstr ""
+
+#: c2c-plugin.php:559
+msgid "Donation for coffee2code plugin: %s"
+msgstr ""
+
+#: c2c-plugin.php:560
+msgid "Coffee fuels my coding."
+msgstr ""
+
+#: c2c-plugin.php:798
 msgid "A plugin by coffee2code"
 msgstr ""
 
-#: c2c-plugin.php:803
+#: c2c-plugin.php:807
 msgid "Save Changes"
 msgstr ""
 
-#: c2c-plugin.php:804
+#: c2c-plugin.php:808
 msgid "Reset Settings"
 msgstr ""
 
-#: c2c-plugin.php:810
+#: c2c-plugin.php:814
 msgid "Scott Reilly, aka coffee2code"
 msgstr ""
 
-#: c2c-plugin.php:811
+#: c2c-plugin.php:815
 msgid "This plugin brought to you by %s."
 msgstr ""
 
-#: c2c-plugin.php:812
+#: c2c-plugin.php:816
 msgid "Please consider a donation"
 msgstr ""
 
-#: c2c-plugin.php:813
+#: c2c-plugin.php:817
 msgid "Did you find this plugin useful?"
 msgstr ""
 
-#. #-#-#-#-#  text-hover.pot (Text Hover 3.1.1)  #-#-#-#-#
+#. #-#-#-#-#  text-hover.pot (Text Hover 3.2)  #-#-#-#-#
 #. Plugin Name of the plugin/theme
-#: text-hover.php:111 text-hover.php:112
+#: text-hover.php:112 text-hover.php:113
 msgid "Text Hover"
 msgstr ""
 
-#: text-hover.php:121
+#: text-hover.php:122
 msgid "Should the matching of terms/acronyms be case sensitive?"
 msgstr ""
 
-#: text-hover.php:122
+#: text-hover.php:123
 msgid ""
 "If checked, then hover text defined for 'WP' would not apply to 'wp'. This "
 "setting applies to all terms. If you want to selectively have case "
@@ -94,39 +103,39 @@ msgid ""
 "entries for each variation."
 msgstr ""
 
-#: text-hover.php:133
+#: text-hover.php:134
 msgid "Text Hover Settings"
 msgstr ""
 
-#: text-hover.php:135
+#: text-hover.php:136
 msgid ""
 "Text Hover is a plugin that allows you to add hover text for text in posts. "
 "Very handy to create hover explanations of people mentioned in your blog, "
 "and/or definitions of unique acronyms and terms you use."
 msgstr ""
 
-#: text-hover.php:137
+#: text-hover.php:138
 msgid "Acronyms and hover text"
 msgstr ""
 
-#: text-hover.php:138
+#: text-hover.php:139
 msgid ""
 "Define terms/acronyms and hovertext explanations here.  The format should be "
 "like this:"
 msgstr ""
 
-#: text-hover.php:140
+#: text-hover.php:141
 msgid ""
 "Where <code>WP</code> is the term, acronym, or phrase you intend to use in "
 "your posts, and the <code>WordPress</code> would be what you want to appear "
 "in a hover tooltip when a visitor hovers their mouse over the term."
 msgstr ""
 
-#: text-hover.php:141
+#: text-hover.php:142
 msgid "Other considerations:"
 msgstr ""
 
-#: text-hover.php:143
+#: text-hover.php:144
 msgid ""
 "Terms and acronyms are assumed to be whole words within your posts (i.e. "
 "they are immediately prepended by some sort of space character (space, tab, "
@@ -134,20 +143,20 @@ msgid ""
 "can include any of: ?!.,-+)]})"
 msgstr ""
 
-#: text-hover.php:145
+#: text-hover.php:146
 msgid ""
 "Only use quotes it they are actual part of the original or hovertext strings."
 msgstr ""
 
-#: text-hover.php:147
+#: text-hover.php:148
 msgid "Define only one hovertext per line."
 msgstr ""
 
-#: text-hover.php:149
+#: text-hover.php:150
 msgid "Hovertexts must not span multiple lines."
 msgstr ""
 
-#: text-hover.php:151
+#: text-hover.php:152
 msgid "Don't use HTML in the hovertext."
 msgstr ""
 

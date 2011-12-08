@@ -2,31 +2,32 @@
 /**
  * @package Text_Hover
  * @author Scott Reilly
- * @version 3.1.1
+ * @version 3.2
  */
 /*
 Plugin Name: Text Hover
-Version: 3.1.1
+Version: 3.2
 Plugin URI: http://coffee2code.com/wp-plugins/text-hover/
 Author: Scott Reilly
 Author URI: http://coffee2code.com
 Text Domain: text-hover
+Domain Path: /lang/
 Description: Add hover text to regular text in posts. Handy for providing explanations of names, terms, phrases, and acronyms mentioned in your blog.
 
-Compatible with WordPress 3.0+, 3.1+. 3.2+.
+Compatible with WordPress 3.1+. 3.2+, 3.3+.
 
 =>> Read the accompanying readme.txt file for instructions and documentation.
 =>> Also, visit the plugin's homepage for additional information and updates.
 =>> Or visit: http://wordpress.org/extend/plugins/text-hover/
 
 TODO:
-	* Update screenshots for WP 3.2
+	* Update screenshots for WP 3.3
 	* Shortcode and template tag to display listing of all supported text hovers (filterable)
 
 */
 
 /*
-Copyright (c) 2007-2011 by Scott Reilly (aka coffee2code)
+Copyright (c) 2007-2012 by Scott Reilly (aka coffee2code)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation
 files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy,
@@ -46,7 +47,7 @@ if ( ! class_exists( 'c2c_TextHover' ) ) :
 
 require_once( 'c2c-plugin.php' );
 
-class c2c_TextHover extends C2C_Plugin_028 {
+class c2c_TextHover extends C2C_Plugin_030 {
 
 	public static $instance;
 
@@ -64,7 +65,7 @@ class c2c_TextHover extends C2C_Plugin_028 {
 		if ( ! is_null( self::$instance ) )
 			return;
 
-		parent::__construct( '3.1.1', 'text-hover', 'c2c', __FILE__, array() );
+		parent::__construct( '3.2', 'text-hover', 'c2c', __FILE__, array() );
 		register_activation_hook( __FILE__, array( __CLASS__, 'activation' ) );
 		self::$instance = $this;
 	}
@@ -178,9 +179,8 @@ class c2c_TextHover extends C2C_Plugin_028 {
 
 } // end c2c_TextHover
 
-// NOTICE: The 'c2c_text_hover' global is deprecated and will be removed in the plugin's version 3.2.
-// Instead, use: c2c_TextHover::$instance
-$GLOBALS['c2c_text_hover'] = new c2c_TextHover();
+// To access plugin object instance use: c2c_TextHover::$instance
+new c2c_TextHover();
 
 endif; // end if !class_exists()
 
