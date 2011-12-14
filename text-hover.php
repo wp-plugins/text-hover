@@ -2,11 +2,11 @@
 /**
  * @package Text_Hover
  * @author Scott Reilly
- * @version 3.2
+ * @version 3.2.1
  */
 /*
 Plugin Name: Text Hover
-Version: 3.2
+Version: 3.2.1
 Plugin URI: http://coffee2code.com/wp-plugins/text-hover/
 Author: Scott Reilly
 Author URI: http://coffee2code.com
@@ -47,7 +47,7 @@ if ( ! class_exists( 'c2c_TextHover' ) ) :
 
 require_once( 'c2c-plugin.php' );
 
-class c2c_TextHover extends C2C_Plugin_030 {
+class c2c_TextHover extends C2C_Plugin_032 {
 
 	public static $instance;
 
@@ -65,7 +65,7 @@ class c2c_TextHover extends C2C_Plugin_030 {
 		if ( ! is_null( self::$instance ) )
 			return;
 
-		parent::__construct( '3.2', 'text-hover', 'c2c', __FILE__, array() );
+		parent::__construct( '3.2.1', 'text-hover', 'c2c', __FILE__, array() );
 		register_activation_hook( __FILE__, array( __CLASS__, 'activation' ) );
 		self::$instance = $this;
 	}
@@ -169,9 +169,9 @@ class c2c_TextHover extends C2C_Plugin_030 {
 		$case_sensitive = apply_filters( 'c2c_text_hover_case_sensitive', $options['case_sensitive'] );
 		$preg_flags = $case_sensitive ? 's' : 'si';
 		foreach ( $text_to_hover as $old_text => $hover_text ) {
-			$old_text = stripslashes( str_replace( $oldchars, $newchars, $old_text ) );
+			$old_text = preg_quote( stripslashes( str_replace( $oldchars, $newchars, $old_text ) ) );
 			// WILL match string within string, but WON'T match within tags
-			$new_text = "$1<acronym title='" . esc_attr( $hover_text ) . "'>$2</acronym>$3";
+			$new_text = "$1<acronym title='" . esc_attr( addcslashes( $hover_text, '\\$' ) ) . "'>$2</acronym>$3";
 			$text = preg_replace( "|(?!<.*?)([\s\'\"\.\x98\x99\x9c\x9d\xCB\x9C\xE2\x84\xA2\xC5\x93\xEF\xBF\xBD\(\[\{])($old_text)([\s\'\"\x98\x99\x9c\x9d\xCB\x9C\xE2\x84\xA2\xC5\x93\xEF\xBF\xBD\?\!\.\,\-\+\]\)\}])(?![^<>]*?>)|$preg_flags", $new_text, $text );
 		}
 		return trim( $text );
