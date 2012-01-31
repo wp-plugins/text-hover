@@ -3,9 +3,9 @@ Contributors: coffee2code
 Donate link: http://coffee2code.com/donate
 Tags: text, post content, abbreviations, terms, acronyms, hover, help, coffee2code
 Requires at least: 3.1
-Tested up to: 3.3
-Stable tag: 3.2.1
-Version: 3.2.1
+Tested up to: 3.3.1
+Stable tag: 3.2.2
+Version: 3.2.2
 
 Add hover text to regular text in posts. Handy for providing explanations of names, terms, phrases, and acronyms mentioned in posts/pages.
 
@@ -130,6 +130,10 @@ add_filter( 'c2c_text_hover_case_sensitive', '__return_false' );`
 
 == Changelog ==
 
+= 3.2.2 =
+* Fix bug where special characters were being double-escaped prior to use in regex
+* Update plugin framework to 034
+
 = 3.2.1 =
 * Fix bug where $x (where x is number) when used in hover text gets removed on display
 * Fix to properly escape shortcut keys prior to internal use in preg_replace()
@@ -234,6 +238,9 @@ add_filter( 'c2c_text_hover_case_sensitive', '__return_false' );`
 
 
 == Upgrade Notice ==
+
+= 3.2.2 =
+Minor bugfix release: fixed bug where special characters were being double-escaped; updated plugin framework.
 
 = 3.2.1 =
 Recommended bugfix release: fixed bug when $x (where x is a number) would not display when used in replacement string; fix to properly escape shortcut keys prior to internal use; and updated plugin framework.
