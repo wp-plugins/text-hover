@@ -2,72 +2,82 @@
 /**
  * @package Text_Hover
  * @author Scott Reilly
- * @version 3.2.2
+ * @version 3.5.1
  */
 /*
 Plugin Name: Text Hover
-Version: 3.2.2
+Version: 3.5.1
 Plugin URI: http://coffee2code.com/wp-plugins/text-hover/
 Author: Scott Reilly
 Author URI: http://coffee2code.com/
+License: GPLv2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: text-hover
 Domain Path: /lang/
 Description: Add hover text to regular text in posts. Handy for providing explanations of names, terms, phrases, and acronyms mentioned in your blog.
 
-Compatible with WordPress 3.1+. 3.2+, 3.3+.
+Compatible with WordPress 3.6+ through 3.8+.
 
 =>> Read the accompanying readme.txt file for instructions and documentation.
 =>> Also, visit the plugin's homepage for additional information and updates.
-=>> Or visit: http://wordpress.org/extend/plugins/text-hover/
+=>> Or visit: http://wordpress.org/plugins/text-hover/
 
 TODO:
-	* Update screenshots for WP 3.3
 	* Shortcode and template tag to display listing of all supported text hovers (filterable)
 
 */
 
 /*
-Copyright (c) 2007-2012 by Scott Reilly (aka coffee2code)
+	Copyright (c) 2007-2014 by Scott Reilly (aka coffee2code)
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation
-files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy,
-modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the
-Software is furnished to do so, subject to the following conditions:
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
 
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+	GNU General Public License for more details.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
-OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR
-IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
+defined( 'ABSPATH' ) or die();
 
 if ( ! class_exists( 'c2c_TextHover' ) ) :
 
-require_once( 'c2c-plugin.php' );
+require_once( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'c2c-plugin.php' );
 
-class c2c_TextHover extends C2C_Plugin_034 {
+final class c2c_TextHover extends C2C_Plugin_037 {
 
-	public static $instance;
+	/**
+	 * @var c2c_TextReplace The one true instance
+	 */
+	private static $instance;
+
+	/**
+	 * Get singleton instance.
+	 *
+	 * @since 3.5
+	 */
+	public static function get_instance() {
+		if ( ! isset( self::$instance ) )
+			self::$instance = new self();
+
+		return self::$instance;
+	}
 
 	/**
 	 * Constructor
-	 *
-	 * @return void
 	 */
-	public function __construct() {
-		$this->c2c_TextHover();
-	}
-
-	public function c2c_TextHover() {
-		// Be a singleton
-		if ( ! is_null( self::$instance ) )
-			return;
-
-		parent::__construct( '3.2.2', 'text-hover', 'c2c', __FILE__, array() );
+	protected function __construct() {
+		parent::__construct( '3.5.1', 'text-hover', 'c2c', __FILE__, array() );
 		register_activation_hook( __FILE__, array( __CLASS__, 'activation' ) );
-		self::$instance = $this;
+
+		return self::$instance = $this;
 	}
 
 	/**
@@ -93,22 +103,11 @@ class c2c_TextHover extends C2C_Plugin_034 {
 	}
 
 	/**
-	 * Override the plugin framework's register_filters() to actually actions against filters.
-	 *
-	 * @return void
-	 */
-	public function register_filters() {
-		$filters = apply_filters( 'c2c_text_hover_filters', array( 'the_content', 'get_the_excerpt', 'widget_text' ) );
-		foreach ( (array) $filters as $filter )
-			add_filter( $filter, array( &$this, 'text_hover' ), 3 );
-	}
-
-	/**
 	 * Initializes the plugin's configuration and localizable text variables.
 	 *
 	 * @return void
 	 */
-	public function load_config() {
+	protected function load_config() {
 		$this->name      = __( 'Text Hover', $this->textdomain );
 		$this->menu_name = __( 'Text Hover', $this->textdomain );
 
@@ -118,19 +117,50 @@ class c2c_TextHover extends C2C_Plugin_034 {
 				), 'allow_html' => true, 'no_wrap' => true, 'input_attributes' => 'rows="15" cols="40"',
 				'label' => '', 'help' => ''
 			),
+			'text_hover_comments' => array( 'input' => 'checkbox', 'default' => false,
+					'label' => __( 'Enable text hover in comments?', $this->textdomain ),
+					'help' => ''
+			),
+			'replace_once' => array( 'input' => 'checkbox', 'default' => false,
+				'label' => __( 'Only text hover once per term per post?', $this->textdomain ),
+				'help' => __( 'If checked, then each term will only have a text hover occur for the first instance it appears in a post.', $this->textdomain )
+			),
 			'case_sensitive' => array( 'input' => 'checkbox', 'default' => true,
 				'label' => __( 'Should the matching of terms/acronyms be case sensitive?', $this->textdomain ),
 				'help' => __( 'If checked, then hover text defined for \'WP\' would not apply to \'wp\'. This setting applies to all terms. If you want to selectively have case insensitive terms, then leave this option checked and create separate entries for each variation.', $this->textdomain )
-			)
+			),
+			'use_pretty_tooltips' => array( 'input' => 'checkbox', 'default' => true,
+				'label' => __( 'Should better looking hover tooltips be shown?', $this->textdomain ),
+				'help' => __( 'If unchecked, the default browser rendering of tooltips will be used.', $this->textdomain )
+			),
 		);
+	}
+
+	/**
+	 * Override the plugin framework's register_filters() to actually actions against filters.
+	 *
+	 * @return void
+	 */
+	public function register_filters() {
+		$filters = apply_filters( 'c2c_text_hover_filters', array( 'the_content', 'get_the_excerpt', 'widget_text' ) );
+		foreach ( (array) $filters as $filter ) {
+			add_filter( $filter, array( $this, 'text_hover' ), 3 );
+		}
+
+		add_action( 'wp_enqueue_scripts',  array( $this, 'enqueue_scripts' ) );
+		add_action( 'admin_print_scripts', array( $this, 'admin_print_scripts' ) );
+
+		add_filter( 'get_comment_text',    array( $this, 'text_hover_comment_text' ), 11 );
+		add_filter( 'get_comment_excerpt', array( $this, 'text_hover_comment_text' ), 11 );
 	}
 
 	/**
 	 * Outputs the text above the setting form
 	 *
+	 * @param string $localized_heading_text (optional) Localized page heading text.
 	 * @return void (Text will be echoed.)
 	 */
-	public function options_page_description() {
+	public function options_page_description( $localized_heading_text = '' ) {
 		parent::options_page_description( __( 'Text Hover Settings', $this->textdomain ) );
 
 		echo '<p>' . __( 'Text Hover is a plugin that allows you to add hover text for text in posts. Very handy to create hover explanations of people mentioned in your blog, and/or definitions of unique acronyms and terms you use.', $this->textdomain ) . '</p>';
@@ -138,7 +168,8 @@ class c2c_TextHover extends C2C_Plugin_034 {
 		echo '<h3>' . __( 'Acronyms and hover text', $this->textdomain ) . '</h3>';
 		echo '<p>' . __( 'Define terms/acronyms and hovertext explanations here.  The format should be like this:', $this->textdomain ) . '</p>';
 		echo "<blockquote><code>WP => WordPress</code></blockquote>";
-		echo '<p>' . __( 'Where <code>WP</code> is the term, acronym, or phrase you intend to use in your posts, and the <code>WordPress</code> would be what you want to appear in a hover tooltip when a visitor hovers their mouse over the term.', $this->textdomain ) . '</p>';
+		echo '<p>' . __( 'Where <code>WP</code> is the term, acronym, or phrase you intend to use in your posts, and the <code>WordPress</code> would be what you want to appear in a hover tooltip when a visitor hovers their mouse over the term.', $this->textdomain );
+		echo ' ' . __( 'See how things look: <acronym title="WordPress" style="border-bottom:1px dashed #000;">WP</acronym>.', $this->textdomain ) . '</p>';
 		echo '<p>' . __( 'Other considerations:', $this->textdomain ) . '</p>';
 		echo '<ul class="c2c-plugin-list"><li>';
 		echo __( 'Terms and acronyms are assumed to be whole words within your posts (i.e. they are immediately prepended by some sort of space character (space, tab, etc) and are immediately appended by a space character or punctuation (which can include any of: ?!.,-+)]})', $this->textdomain );
@@ -154,32 +185,91 @@ class c2c_TextHover extends C2C_Plugin_034 {
 	}
 
 	/**
+	 * Enqueues scripts and styles for plugin's settings page.
+	 *
+	 * @since 3.5
+	 */
+	public function admin_print_scripts() {
+		if ( $this->options_page == get_current_screen()->id ) {
+			$this->enqueue_scripts();
+		}
+	}
+
+	/**
+	 * Enqueues scripts and styles.
+	 *
+	 * @since 3.5
+	 */
+	public function enqueue_scripts() {
+		$options = $this->get_options();
+
+		if ( ! apply_filters( 'c2c_text_hover_use_pretty_tooltips', $options['use_pretty_tooltips'] == '1' ) ) {
+			return;
+		}
+
+		wp_enqueue_style( 'qtip2', plugins_url( 'assets/jquery.qtip.min.css', __FILE__ ) );
+		wp_enqueue_style( 'text-hover', plugins_url( 'assets/text-hover.css', __FILE__ ) );
+
+		wp_enqueue_script( 'qtip2', plugins_url( 'assets/jquery.qtip.min.js', __FILE__ ), array( 'jquery' ), '2.2.0', true );
+		wp_enqueue_script( 'text-hover', plugins_url( 'assets/text-hover.js', __FILE__ ), array( 'jquery', 'qtip2' ), $this->version, true );
+	}
+
+	/**
+	 * Text hovers comment text if enabled.
+	 *
+	 * @since 3.5
+	 *
+	 * @param string $text The comment text
+	 * @return string
+	 */
+	public function text_hover_comment_text( $text ) {
+		$options = $this->get_options();
+
+		if ( apply_filters( 'c2c_text_hover_comments', $options['text_hover_comments'] ) ) {
+			$text = $this->text_hover( $text );
+		}
+
+		return $text;
+	}
+
+	/**
 	 * Perform text hover replacements
 	 *
 	 * @param string $text Text to be processed for text hovers
 	 * @return string Text with hovertexts already processed
 	 */
 	public function text_hover( $text ) {
-		$options = $this->get_options();
-		$text = ' ' . $text . ' ';
-		$text_to_hover = apply_filters( $this->admin_options_name.'_option_text_to_hover', $options['text_to_hover'] ); //legacy (pre-3.0)
-		$text_to_hover = apply_filters( 'c2c_text_hover', $text_to_hover );
+		$options        = $this->get_options();
+		$text_to_hover  = apply_filters( 'c2c_text_hover',                $options['text_to_hover'] );
 		$case_sensitive = apply_filters( 'c2c_text_hover_case_sensitive', $options['case_sensitive'] );
-		$preg_flags = $case_sensitive ? 's' : 'si';
+		$limit          = apply_filters( 'c2c_text_hover_once',           $options['replace_once'] ) ? 1 : -1;
+		$preg_flags     = $case_sensitive ? 's' : 'si';
+
+		$text = ' ' . $text . ' ';
+
 		foreach ( $text_to_hover as $old_text => $hover_text ) {
+
+			if ( empty( $hover_text ) ) {
+				continue;
+			}
+
 			$old_text = preg_quote( $old_text, '|' );
 			// WILL match string within string, but WON'T match within tags
 			$new_text = "$1<acronym title='" . esc_attr( addcslashes( $hover_text, '\\$' ) ) . "'>$2</acronym>$3";
-			$text = preg_replace( "|(?!<.*?)([\s\'\"\.\x98\x99\x9c\x9d\xCB\x9C\xE2\x84\xA2\xC5\x93\xEF\xBF\xBD\(\[\{])($old_text)([\s\'\"\x98\x99\x9c\x9d\xCB\x9C\xE2\x84\xA2\xC5\x93\xEF\xBF\xBD\?\!\.\,\-\+\]\)\}])(?![^<>]*?>)|$preg_flags", $new_text, $text );
+			$text = preg_replace(
+				"|(?!<.*?)([\s\'\"\.\x98\x99\x9c\x9d\xCB\x9C\xE2\x84\xA2\xC5\x93\xEF\xBF\xBD\(\[\{])($old_text)([\s\'\"\x98\x99\x9c\x9d\xCB\x9C\xE2\x84\xA2\xC5\x93\xEF\xBF\xBD\?\!\.\,\-\+\]\)\}])(?![^<>]*?>)|$preg_flags",
+				$new_text,
+				$text,
+				$limit
+			);
+
 		}
+
 		return trim( $text );
 	}
 
 } // end c2c_TextHover
 
-// To access plugin object instance use: c2c_TextHover::$instance
-new c2c_TextHover();
+c2c_TextHover::get_instance();
 
 endif; // end if !class_exists()
-
-?>

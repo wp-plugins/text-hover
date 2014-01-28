@@ -1,28 +1,36 @@
 === Text Hover ===
 Contributors: coffee2code
-Donate link: http://coffee2code.com/donate
+Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=6ARCFJ9TX3522
 Tags: text, post content, abbreviations, terms, acronyms, hover, help, coffee2code
-Requires at least: 3.1
-Tested up to: 3.3.1
-Stable tag: 3.2.2
-Version: 3.2.2
+License: GPLv2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Requires at least: 3.6
+Tested up to: 3.8.1
+Stable tag: 3.5.1
 
 Add hover text to regular text in posts. Handy for providing explanations of names, terms, phrases, and acronyms mentioned in posts/pages.
 
 
 == Description ==
 
-Add hover text to regular text in posts.  Handy for providing explanations of names, terms, phrases, and acronyms mentioned in posts/pages.
+This plugin allows you to easily define help text that appears when a visitor hovers their mouse over a word or phrase in a post or page.
 
-Hover text are defined as terms/acronyms/phrases that you expect to use in your blog posts/pages and the expand text you wish to appear when the visitor hovers their mouse over the term.  The admin options form for the plugin explains the format, which is quite simple.  An example of which is shown here :
+Via the plugin's settings, simply specify the words or phrases that you want to be associated with hover text, and of course, the desired hover texts themselves. The format is quite simple; an example of which is shown here:
 
 `WP => WordPress
 Matt => Matt Mullenweg
 The Scooby Shack => the bar where the gang hangs out`
 
-**Note:** This is not the same as my [Text Replace](http://wordpress.org/extend/plugins/text-replace) plugin, which defines terms or phrases that you want replaced by replacement text when displayed on your site.  Text Hover instead adds the hover text as additional information for when visitors hover over the term, which is otherwise displayed in the post as you typed it.
+Additional features of the plugin controlled both via settings and filters:
 
-Links: [Plugin Homepage](http://coffee2code.com/wp-plugins/text-hover/) | [Plugin Directory Page](http://wordpress.org/extend/plugins/text-hover/) | [Author Homepage](http://coffee2code.com)
+* Hover text can be enabled for comments (it isn't by default)
+* Hover text can be made case insensitive (it is case sensitive by default)
+* Hover text can be limited to doing only one replacement per term, per post (by default, all occurrences of a term are given hovertext)
+* Hover text can be rendered using the default browser tooltip (by default, the better-looking <a href="http://qtip2.com/">qTip2</a> library is used)
+
+**Note:** This is not the same as my [Text Replace](http://wordpress.org/plugins/text-replace) plugin, which defines terms or phrases that you want replaced by replacement text when displayed on your site. Text Hover instead adds the hover text as additional information for when visitors hover over the term, which is otherwise displayed in the post as you typed it.
+
+Links: [Plugin Homepage](http://coffee2code.com/wp-plugins/text-hover/) | [Plugin Directory Page](http://wordpress.org/plugins/text-hover/) | [Author Homepage](http://coffee2code.com)
 
 
 == Installation ==
@@ -37,14 +45,15 @@ Links: [Plugin Homepage](http://coffee2code.com/wp-plugins/text-hover/) | [Plugi
 == Screenshots ==
 
 1. A screenshot of the admin options page for the plugin, where you define the terms/acronyms/phrases and their related hover text
-2. A screenshot of the plugin in action for a post when the mouse is hovering over a defined hover text term
+2. A screenshot of the plugin in action for a post when the mouse is hovering over a defined hover text term using the pretty tooltips
+3. A screenshot of the plugin in action for a post when the mouse is hovering over a defined hover text term using default browser tooltips (in this case, Chrome on OSX)
 
 
 == Frequently Asked Questions ==
 
-= In my posts, hover text terms do not appear any differently than regular text (though I can hover over them and see the hover text)!  What gives? =
+= In my posts, hover text terms do not appear any differently than regular text (though I can hover over them and see the hover text)! What gives? =
 
-The plugin currently makes use of the standard HTML tag `acronym` to specify the terms and their hover text.  Browsers have default handling and display of `acronym`.  It's possibly that the CSS for your theme is overriding the default display.  I use the following in my site's styles.css file to ensure it displays for me in the manner I prefer (which, by the same token, you can use more CSS formatting to further format the hover terms) :
+The plugin currently makes use of the standard HTML tag `acronym` to specify the terms and their hover text. Browsers have default handling and display of `acronym`. It's possibly that the CSS for your theme is overriding the default display. I use the following in my site's styles.css file to ensure it displays for me in the manner I prefer (which, by the same token, you can use more CSS formatting to further format the hover terms) :
 
 `acronym {
 	border-bottom:1px dotted #000;
@@ -52,7 +61,7 @@ The plugin currently makes use of the standard HTML tag `acronym` to specify the
 
 = Does this plugin modify the post content in the database? =
 
-No.  The plugin filters post content on-the-fly.
+No. The plugin filters post content on-the-fly.
 
 = Will this work for posts I wrote prior to installing this plugin? =
 
@@ -60,20 +69,32 @@ Yes, if they include strings that you've now defined as terms.
 
 = What post fields get handled by this plugin? =
 
-By default, the plugin filters the post content, post excerpt fields, and widget text.  You can use the 'c2c_text_hover_filters' filter to modify that behavior (see Filters section).
+By default, the plugin filters the post content, post excerpt fields, widget text, and optionally comments and comment excerpts. You can use the 'c2c_text_hover_filters' filter to modify that behavior (see Filters section).
 
 = How can I get text hover to apply for post titles (or something not processed for text hover by default)? =
 
-You can add to the list of filters that get processed for text hover terms.  See the Filters section for an example.
+You can add to the list of filters that get processed for text hover terms. See the Filters section for an example.
 
 = Is the plugin case sensitive? =
 
-By default, yes.  There is a setting you can change to make it case insensitive.  Or you can use the 'c2c_text_hover_case_sensitive' filter (see Filters section).  Note that the option applies to all terms/acronyms.  If you want to selectively have terms/acronyms be case insensitive, you should leave the case sensitive setting checked and add a listing for each case variation you wish to support.
+By default, yes. There is a setting you can change to make it case insensitive. Or you can use the 'c2c_text_hover_case_sensitive' filter (see Filters section). Note that the option applies to all terms/acronyms. If you want to selectively have terms/acronyms be case insensitive, you should leave the case sensitive setting checked and add a listing for each case variation you wish to support.
+
+= Will all instances of a given term be hovered in a single post? =
+
+By default, yes. There is a setting you can change so that only the first occurrence of the term in the post gets hovered. Or if you are a coder, you can use the 'c2c_text_hover_replace_once' filter (see Filters section).
+
+= Can I style the tooltip? =
+
+Yes, but only if you have the pretty tooltips enabled (via settings or the filter). The class you want to style in your custom CSS is '.text-hover-qtip'.
+
+= Does this plugin include unit tests? =
+
+Yes.
 
 
 == Filters ==
 
-The plugin exposes three filters for hooking.  Typically, the code to utilize these hooks would go inside your active theme's functions.php file.
+The plugin exposes five filters for hooking. Typically, the code to utilize these hooks would go inside your active theme's functions.php file. Bear in mind that all of the features controlled by these filters are configurable via the plugin's settings page. These filters are likely only of interest to advanced users able to code.
 
 = c2c_text_hover_filters (filter) =
 
@@ -98,7 +119,7 @@ The 'c2c_text_hover' hook allows you to customize or override the setting defini
 
 Arguments:
 
-* $text_hover_array (array): Array of text hover terms and their hover texts.  This will be the value set via the plugin's settings page.
+* $text_hover_array (array): Array of text hover terms and their hover texts. This will be the value set via the plugin's settings page.
 
 Example:
 
@@ -114,21 +135,103 @@ function my_text_hovers( $text_hover_array ) {
 	return $text_hover_array;
 }`
 
+= c2c_text_hover_text_comments (filter) =
+
+The 'c2c_text_hover_text_comments' hook allows you to customize or override the setting indicating if text linkification should be enabled in comments.
+
+Arguments:
+
+* $state (bool): Either true or false indicating if text linkification is enabled for comments. The default value will be the value set via the plugin's settings page.
+
+Example:
+
+`// Prevent text linkification from ever being enabled in comments.
+add_filter( 'c2c_linkify_text_comments', '__return_false' );`
+
 = c2c_text_hover_case_sensitive (filter) =
 
 The 'c2c_text_hover_case_sensitive' hook allows you to customize or override the setting indicating if text hover should be case sensitive.
 
 Arguments:
 
-* $state (bool): Either true or false indicating if text hover is case sensitive.  This will be the value set via the plugin's settings page.
+* $state (bool): Either true or false indicating if text hover is case sensitive. This will be the value set via the plugin's settings page.
 
 Example:
 
 `// Prevent text hover from ever being case sensitive.
 add_filter( 'c2c_text_hover_case_sensitive', '__return_false' );`
 
+= c2c_text_hover_once (filter) =
+
+The 'c2c_text_hover_once' hook allows you to customize or override the setting indicating if text hovering should be limited to once per term per piece of text being processed regardless of how many times the term appears.
+
+Arguments:
+
+* $state (bool): Either true or false indicating if text hovering is to only occur once per term. The default value will be the value set via the plugin's settings page.
+
+Example:
+
+`// Only show hovertext for a term/shortcut once per post.
+add_filter( 'c2c_text_hover_once', '__return_true' );`
+
+= c2c_text_hover_use_pretty_tooltips (filter) =
+
+The 'c2c_text_hover_use_pretty_tooltips' hook allows you to customize or override the setting indicating if text hovering should use prettier tooltips to display the hover text. If false, the browser's default tooltips will be used.
+
+Arguments:
+
+* $state (bool): Either true or false indicating if prettier tooltips should be used. The default value will be the value set via the plugin's settings page.
+
+Example:
+
+`// Prevent pretty tooltips from being used.
+add_filter( 'c2c_text_hover_use_pretty_tooltips', '__return_false' );`
+
 
 == Changelog ==
+
+= 3.5.1 (2014-01-28) =
+* Fix logic evaluation to properly honor replace_once checkbox value
+
+= 3.5 (2014-01-05) =
+* Add setting to allow limiting text replacement to once per term per text
+* Add filter 'c2c_text_hover_once'
+* Add qTip2 library for better looking hover popups
+* Add setting to allow use of prettier tooltips (i.e. the qTip2 library). Default is true.
+* Add filter 'c2c_text_hover_use_pretty_tooltips'
+* Add setting to allow text hover to apply to comments (default is for it not to)
+* Add filter 'c2c_text_hover_comments'
+* Add text_hover_comment_text()
+* Add preview for tooltips to plugin's settings page
+* Add unit tests
+* Add file assets/text-hover.js (to enable qTip)
+* Add file assets/text-hover.css (to provide default styling for qTip)
+* Update plugin framework to 037
+* Better singleton implementation:
+    * Add `get_instance()` static method for returning/creating singleton instance
+    * Make static variable 'instance' private
+    * Make constructor protected
+    * Make class final
+    * Additional related changes in plugin framework (protected constructor, erroring `__clone()` and `__wakeup()`)
+* Add checks to prevent execution of code if file is directly accessed
+* Re-license as GPLv2 or later (from X11)
+* Add 'License' and 'License URI' header tags to readme.txt and plugin file
+* Use explicit path for require_once()
+* Discontinue use of PHP4-style constructor
+* Discontinue use of explicit pass-by-reference for objects
+* Remove ending PHP close tag
+* Minor documentation improvements
+* Minor code reformatting (spacing)
+* Note compatibility through WP 3.8+
+* Drop compatibility with version of WP older than 3.6
+* Update copyright date (2014)
+* Regenerate .pot
+* Change donate link
+* Add assets directory to plugin repository checkout
+* Update screenshots
+* Add third screenshot
+* Move screenshots into repo's assets directory
+* Add banner
 
 = 3.2.2 =
 * Fix bug where special characters were being double-escaped prior to use in regex
@@ -238,6 +341,12 @@ add_filter( 'c2c_text_hover_case_sensitive', '__return_false' );`
 
 
 == Upgrade Notice ==
+
+= 3.5.1 =
+Recommended minor bugfix: fix to honor replace_once checkbox value
+
+= 3.5 =
+Major update: added qTip library for better looking hover popups; added ability to do one hover text per term per post; added ability to enable hover text in comments; added unit tests; compatibility now WP 3.6-3.8+
 
 = 3.2.2 =
 Minor bugfix release: fixed bug where special characters were being double-escaped; updated plugin framework.
