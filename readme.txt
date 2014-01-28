@@ -5,8 +5,8 @@ Tags: text, post content, abbreviations, terms, acronyms, hover, help, coffee2co
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Requires at least: 3.6
-Tested up to: 3.8
-Stable tag: 3.5
+Tested up to: 3.8.1
+Stable tag: 3.5.1
 
 Add hover text to regular text in posts. Handy for providing explanations of names, terms, phrases, and acronyms mentioned in posts/pages.
 
@@ -190,6 +190,9 @@ add_filter( 'c2c_text_hover_use_pretty_tooltips', '__return_false' );`
 
 == Changelog ==
 
+= 3.5.1 (2014-01-28) =
+* Fix logic evaluation to properly honor replace_once checkbox value
+
 = 3.5 (2014-01-05) =
 * Add setting to allow limiting text replacement to once per term per text
 * Add filter 'c2c_text_hover_once'
@@ -338,6 +341,9 @@ add_filter( 'c2c_text_hover_use_pretty_tooltips', '__return_false' );`
 
 
 == Upgrade Notice ==
+
+= 3.5.1 =
+Recommended minor bugfix: fix to honor replace_once checkbox value
 
 = 3.5 =
 Major update: added qTip library for better looking hover popups; added ability to do one hover text per term per post; added ability to enable hover text in comments; added unit tests; compatibility now WP 3.6-3.8+
