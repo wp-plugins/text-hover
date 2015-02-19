@@ -5,8 +5,8 @@ Tags: text, post content, abbreviations, terms, acronyms, hover, help, coffee2co
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Requires at least: 3.6
-Tested up to: 3.8.1
-Stable tag: 3.5.1
+Tested up to: 4.1
+Stable tag: 3.6
 
 Add hover text to regular text in posts. Handy for providing explanations of names, terms, phrases, and acronyms mentioned in posts/pages.
 
@@ -30,7 +30,7 @@ Additional features of the plugin controlled both via settings and filters:
 
 **Note:** This is not the same as my [Text Replace](http://wordpress.org/plugins/text-replace) plugin, which defines terms or phrases that you want replaced by replacement text when displayed on your site. Text Hover instead adds the hover text as additional information for when visitors hover over the term, which is otherwise displayed in the post as you typed it.
 
-Links: [Plugin Homepage](http://coffee2code.com/wp-plugins/text-hover/) | [Plugin Directory Page](http://wordpress.org/plugins/text-hover/) | [Author Homepage](http://coffee2code.com)
+Links: [Plugin Homepage](http://coffee2code.com/wp-plugins/text-hover/) | [Plugin Directory Page](https://wordpress.org/plugins/text-hover/) | [Author Homepage](http://coffee2code.com)
 
 
 == Installation ==
@@ -107,11 +107,12 @@ Arguments:
 Example:
 
 `// Enable text hover for post/page titles
-add_filter( 'c2c_text_hover_filters', 'more_text_hovers' );
 function more_text_hovers( $filters ) {
 	$filters[] = 'the_title'; // Here you could put in the name of any filter you want
 	return $filters;
-}`
+}
+add_filter( 'c2c_text_hover_filters', 'more_text_hovers' );
+`
 
 = c2c_text_hover (filter) =
 
@@ -124,7 +125,6 @@ Arguments:
 Example:
 
 `// Add dynamic text hover
-add_filter( 'c2c_text_hover', 'my_text_hovers' );
 function my_text_hovers( $text_hover_array ) {
 	// Add new term and hover text
 	$text_hover_array['Matt'] => 'Matt Mullenweg';
@@ -133,7 +133,9 @@ function my_text_hovers( $text_hover_array ) {
 		unset( $text_hover_array['Drupal'] );
 	// Important!
 	return $text_hover_array;
-}`
+}
+add_filter( 'c2c_text_hover', 'my_text_hovers' );
+`
 
 = c2c_text_hover_text_comments (filter) =
 
@@ -190,8 +192,28 @@ add_filter( 'c2c_text_hover_use_pretty_tooltips', '__return_false' );`
 
 == Changelog ==
 
+= 3.6 (2015-02-19) =
+* Improve support of '&' in text to be replaced by recognizing its encoded alternatives ('&amp;', '&#038;') as equivalents
+* Support replacing multibyte strings. NOTE: Multibyte strings don't honor limiting their replacement within a piece of text to once
+* Add class of 'c2c-text-hover' to acronym tags added by plugin
+* Update packaged qTip2 JS library to v2.2.1
+* Limit qTip2 only to acronyms added by the plugin
+* Update plugin framework to 039
+* Add more unit tests
+* Explicitly declare `activation()` static
+* Cast filtered value of 'c2c_text_hover' filter as array
+* Reformat plugin header
+* Change regex delimiter from '|' to '~'
+* Change documentation links to wp.org to be https
+* Minor documentation spacing changes throughout
+* Note compatibility through WP 4.1+
+* Update copyright date (2015)
+* Add plugin icon
+* Regenerate .pot
+
 = 3.5.1 (2014-01-28) =
 * Fix logic evaluation to properly honor replace_once checkbox value
+* Minor code reformatting
 
 = 3.5 (2014-01-05) =
 * Add setting to allow limiting text replacement to once per term per text
@@ -341,6 +363,9 @@ add_filter( 'c2c_text_hover_use_pretty_tooltips', '__return_false' );`
 
 
 == Upgrade Notice ==
+
+= 3.6 =
+Recommended update: improved support of '&' in text to be replaced; added support for replacing multibyte text; added more unit tests; updated plugin framework to version 039; noted compatibility through WP 4.1+; added plugin icon
 
 = 3.5.1 =
 Recommended minor bugfix: fix to honor replace_once checkbox value

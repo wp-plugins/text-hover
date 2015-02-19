@@ -2,6 +2,16 @@
 
 class Text_Hover_Test extends WP_UnitTestCase {
 
+	protected static $text_to_hover = array(
+		'WP'             => 'WordPress',
+		"coffee2code"    => 'Plugin developer',
+		'Matt Mullenweg' => 'Co-Founder of WordPress',
+		'blank'          => '',
+		'C&C'            => 'Command & Control',
+		'漢字はユニコード'  => 'Kanji Unicode',
+		'HTML'           => '<strong>HTML</strong>',
+	);
+
 	function setUp() {
 		parent::setUp();
 		$this->set_option();
@@ -18,7 +28,7 @@ class Text_Hover_Test extends WP_UnitTestCase {
 	}
 
 
-	/**
+	/*
 	 *
 	 * DATA PROVIDERS
 	 *
@@ -33,20 +43,26 @@ class Text_Hover_Test extends WP_UnitTestCase {
 		);
 	}
 
+	public static function get_comment_filters() {
+		return array(
+			array( 'get_comment_text' ),
+			array( 'get_comment_excerpt' ),
+		);
+	}
 
-	/**
+	public static function get_text_to_hover() {
+		return array_map( function($v) { return array( $v ); }, array_keys( self::$text_to_hover ) );
+	}
+
+
+	/*
 	 *
 	 * HELPER FUNCTIONS
 	 *
 	 */
 
 	function text_hovers( $term = '' ) {
-		$text_to_hover = array(
-			'WP' => 'WordPress',
-			"coffee2code" => 'Plugin developer',
-			'Matt Mullenweg' => 'Co-Founder of WordPress',
-			'blank' => '',
-		);
+		$text_to_hover = self::$text_to_hover;
 
 		if ( ! empty( $term ) ) {
 			$text_to_hover = isset( $text_to_hover[ $term ] ) ? $text_to_hover[ $term ] : '';
@@ -57,7 +73,7 @@ class Text_Hover_Test extends WP_UnitTestCase {
 
 	function set_option( $settings = array() ) {
 		$defaults = array(
-			'text_to_hover' => $this->text_hovers(),
+			'text_to_hover'  => $this->text_hovers(),
 			'case_sensitive' => true,
 		);
 		$settings = wp_parse_args( $settings, $defaults );
@@ -68,12 +84,21 @@ class Text_Hover_Test extends WP_UnitTestCase {
 		return c2c_TextHover::get_instance()->text_hover( $text );
 	}
 
-	function expected_text( $term ) {
+	/**
+	 * @param string $display_term Term that should be in link if it doesn't match $term.
+	 */
+	function expected_text( $term, $display_term = '' ) {
 		$hover_text = $this->text_hovers( $term );
 		if ( empty( $hover_text ) ) {
 			$hover_text = $this->text_hovers( strtolower( $term ) );
 		}
-		return "<acronym title='$hover_text'>$term</acronym>";
+		if ( empty( $hover_text ) ){
+			return $term;
+		}
+		if ( $display_term ) {
+			$term = $display_term;
+		}
+		return "<acronym class='c2c-text-hover' title='" . esc_attr( $hover_text ) . "'>$term</acronym>";
 	}
 
 	function add_text_to_hover( $text_to_hover ) {
@@ -88,12 +113,28 @@ class Text_Hover_Test extends WP_UnitTestCase {
 	}
 
 
-	/**
+	/*
 	 *
 	 * TESTS
 	 *
 	 */
 
+
+	function test_class_exists() {
+		$this->assertTrue( class_exists( 'c2c_TextHover' ) );
+	}
+
+	function test_plugin_framework_class_name() {
+		$this->assertTrue( class_exists( 'C2C_Plugin_039' ) );
+	}
+
+	function test_version() {
+		$this->assertEquals( '3.6', c2c_TextHover::get_instance()->version() );
+	}
+
+	function test_instance_object_is_returned() {
+		$this->assertTrue( is_a( c2c_TextHover::get_instance(), 'c2c_TextHover' ) );
+	}
 
 	function test_hovers_text() {
 		$expected = $this->expected_text( 'coffee2code' );
@@ -104,6 +145,30 @@ class Text_Hover_Test extends WP_UnitTestCase {
 		$this->assertEquals( "$expected starts",            $this->text_hover( 'coffee2code starts' ) );
 
 		$this->assertEquals( $this->expected_text( 'Matt Mullenweg' ), $this->text_hover( 'Matt Mullenweg' ) );
+	}
+
+	/**
+	 * @dataProvider get_text_to_hover
+	 */
+	function test_hovers_text_as_defined_in_setting( $text ) {
+		$this->assertEquals( $this->expected_text( $text ), $this->text_hover( $text ) );
+	}
+
+	// This duplicates the test just previously done, but doing it again to ensure
+	// this is explicitly tested.
+	function test_hover_text_is_attribute_escaped() {
+		$this->assertEquals(
+			"<acronym class='c2c-text-hover' title='" . esc_attr( $this->text_hovers( 'HTML' ) ) . "'>HTML</acronym>",
+			$this->text_hover( 'HTML' )
+		);
+	}
+
+	function test_hovers_text_with_html_encoded_amp_ampersand() {
+		$this->assertEquals( $this->expected_text( 'C&C', 'C&amp;C' ), $this->text_hover( 'C&amp;C' ) );
+	}
+
+	function test_hovers_text_with_html_encoded_038_ampersand() {
+		$this->assertEquals( $this->expected_text( 'C&C', 'C&#038;C' ), $this->text_hover( 'C&#038;C' ) );
 	}
 
 	function test_hovers_single_term_multiple_times() {
@@ -155,7 +220,7 @@ class Text_Hover_Test extends WP_UnitTestCase {
 		$this->assertEquals( $this->expected_text( 'COFFEE2CODE' ), $this->text_hover( 'COFFEE2CODE' ) );
 	}
 
-	function test_hoves_with_case_insensitivity_via_filter() {
+	function test_hovers_with_case_insensitivity_via_filter() {
 		$this->test_hovers_with_case_sensitivity_by_default();
 		add_filter( 'c2c_text_hover_case_sensitive', '__return_false' );
 
@@ -166,7 +231,7 @@ class Text_Hover_Test extends WP_UnitTestCase {
 
 	function test_hovers_term_added_via_filter() {
 		$this->assertEquals( 'bbPress', $this->text_hover( 'bbPress' ) );
-		$expected = "<acronym title='Forum Software'>bbPress</acronym>";
+		$expected = "<acronym class='c2c-text-hover' title='Forum Software'>bbPress</acronym>";
 		add_filter( 'c2c_text_hover', array( $this, 'add_text_to_hover' ) );
 
 		$this->assertEquals( $expected, $this->text_hover( 'bbPress' ) );
@@ -201,6 +266,19 @@ class Text_Hover_Test extends WP_UnitTestCase {
 	function test_hover_applies_to_default_filters( $filter ) {
 		$expected = $this->expected_text( 'coffee2code' );
 
+		$this->assertNotFalse( has_filter( $filter, array( c2c_TextHover::get_instance(), 'text_hover' ), 3 ) );
+		$this->assertGreaterThan( 0, strpos( apply_filters( $filter, 'a coffee2code' ), $expected ) );
+	}
+
+	/**
+	 * @dataProvider get_comment_filters
+	 */
+	function test_hover_applies_to_comment_filters( $filter ) {
+		$expected = $this->expected_text( 'coffee2code' );
+
+		add_filter( 'c2c_text_hover_comments', '__return_true' );
+
+		$this->assertNotFalse( has_filter( $filter, array( c2c_TextHover::get_instance(), 'text_hover_comment_text' ), 11 ) );
 		$this->assertGreaterThan( 0, strpos( apply_filters( $filter, 'a coffee2code' ), $expected ) );
 	}
 

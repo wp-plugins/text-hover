@@ -1,34 +1,34 @@
 <?php
 /**
+ * Plugin Name: Text Hover
+ * Version:     3.6
+ * Plugin URI:  http://coffee2code.com/wp-plugins/text-hover/
+ * Author:      Scott Reilly
+ * Author URI:  http://coffee2code.com/
+ * License:     GPLv2 or later
+ * License URI: http://www.gnu.org/licenses/gpl-2.0.html
+ * Text Domain: text-hover
+ * Domain Path: /lang/
+ * Description: Add hover text to regular text in posts. Handy for providing explanations of names, terms, phrases, and acronyms mentioned in your blog.
+ *
+ * Compatible with WordPress 3.6+ through 4.1+.
+ *
+ * =>> Read the accompanying readme.txt file for instructions and documentation.
+ * =>> Also, visit the plugin's homepage for additional information and updates.
+ * =>> Or visit: https://wordpress.org/plugins/text-hover/
+ *
  * @package Text_Hover
  * @author Scott Reilly
- * @version 3.5.1
+ * @version 3.6
  */
+
 /*
-Plugin Name: Text Hover
-Version: 3.5.1
-Plugin URI: http://coffee2code.com/wp-plugins/text-hover/
-Author: Scott Reilly
-Author URI: http://coffee2code.com/
-License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Text Domain: text-hover
-Domain Path: /lang/
-Description: Add hover text to regular text in posts. Handy for providing explanations of names, terms, phrases, and acronyms mentioned in your blog.
-
-Compatible with WordPress 3.6+ through 3.8+.
-
-=>> Read the accompanying readme.txt file for instructions and documentation.
-=>> Also, visit the plugin's homepage for additional information and updates.
-=>> Or visit: http://wordpress.org/plugins/text-hover/
-
-TODO:
-	* Shortcode and template tag to display listing of all supported text hovers (filterable)
-
+ * TODO:
+ * - Shortcode and template tag to display listing of all supported text hovers (filterable)
 */
 
 /*
-	Copyright (c) 2007-2014 by Scott Reilly (aka coffee2code)
+	Copyright (c) 2007-2015 by Scott Reilly (aka coffee2code)
 
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
@@ -51,10 +51,12 @@ if ( ! class_exists( 'c2c_TextHover' ) ) :
 
 require_once( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'c2c-plugin.php' );
 
-final class c2c_TextHover extends C2C_Plugin_037 {
+final class c2c_TextHover extends C2C_Plugin_039 {
 
 	/**
-	 * @var c2c_TextReplace The one true instance
+	 * The one true instance.
+	 *
+	 * @var c2c_TextReplace
 	 */
 	private static $instance;
 
@@ -64,17 +66,18 @@ final class c2c_TextHover extends C2C_Plugin_037 {
 	 * @since 3.5
 	 */
 	public static function get_instance() {
-		if ( ! isset( self::$instance ) )
+		if ( ! isset( self::$instance ) ) {
 			self::$instance = new self();
+		}
 
 		return self::$instance;
 	}
 
 	/**
-	 * Constructor
+	 * Constructor.
 	 */
 	protected function __construct() {
-		parent::__construct( '3.5.1', 'text-hover', 'c2c', __FILE__, array() );
+		parent::__construct( '3.6', 'text-hover', 'c2c', __FILE__, array() );
 		register_activation_hook( __FILE__, array( __CLASS__, 'activation' ) );
 
 		return self::$instance = $this;
@@ -84,19 +87,13 @@ final class c2c_TextHover extends C2C_Plugin_037 {
 	 * Handles activation tasks, such as registering the uninstall hook.
 	 *
 	 * @since 3.1
-	 *
-	 * @return void
 	 */
-	public function activation() {
+	public static function activation() {
 		register_uninstall_hook( __FILE__, array( __CLASS__, 'uninstall' ) );
 	}
 
 	/**
 	 * Handles uninstallation tasks, such as deleting plugin options.
-	 *
-	 * This can be overridden.
-	 *
-	 * @return void
 	 */
 	public function uninstall() {
 		delete_option( 'c2c_text_hover' );
@@ -104,8 +101,6 @@ final class c2c_TextHover extends C2C_Plugin_037 {
 
 	/**
 	 * Initializes the plugin's configuration and localizable text variables.
-	 *
-	 * @return void
 	 */
 	protected function load_config() {
 		$this->name      = __( 'Text Hover', $this->textdomain );
@@ -118,28 +113,28 @@ final class c2c_TextHover extends C2C_Plugin_037 {
 				'label' => '', 'help' => ''
 			),
 			'text_hover_comments' => array( 'input' => 'checkbox', 'default' => false,
-					'label' => __( 'Enable text hover in comments?', $this->textdomain ),
-					'help' => ''
+				'label' => __( 'Enable text hover in comments?', $this->textdomain ),
+				'help'  => ''
 			),
 			'replace_once' => array( 'input' => 'checkbox', 'default' => false,
 				'label' => __( 'Only text hover once per term per post?', $this->textdomain ),
-				'help' => __( 'If checked, then each term will only have a text hover occur for the first instance it appears in a post.', $this->textdomain )
+				'help'  => __( 'If checked, then each term will only have a text hover occur for the first instance it appears in a post.', $this->textdomain ) .
+					'<br />' .
+					__( 'Note: this setting currently does not apply if the term contains a multibyte character.', $this->textdomain )
 			),
 			'case_sensitive' => array( 'input' => 'checkbox', 'default' => true,
 				'label' => __( 'Should the matching of terms/acronyms be case sensitive?', $this->textdomain ),
-				'help' => __( 'If checked, then hover text defined for \'WP\' would not apply to \'wp\'. This setting applies to all terms. If you want to selectively have case insensitive terms, then leave this option checked and create separate entries for each variation.', $this->textdomain )
+				'help'  => __( 'If checked, then hover text defined for \'WP\' would not apply to \'wp\'. This setting applies to all terms. If you want to selectively have case insensitive terms, then leave this option checked and create separate entries for each variation.', $this->textdomain )
 			),
 			'use_pretty_tooltips' => array( 'input' => 'checkbox', 'default' => true,
 				'label' => __( 'Should better looking hover tooltips be shown?', $this->textdomain ),
-				'help' => __( 'If unchecked, the default browser rendering of tooltips will be used.', $this->textdomain )
+				'help'  => __( 'If unchecked, the default browser rendering of tooltips will be used.', $this->textdomain )
 			),
 		);
 	}
 
 	/**
 	 * Override the plugin framework's register_filters() to actually actions against filters.
-	 *
-	 * @return void
 	 */
 	public function register_filters() {
 		$filters = apply_filters( 'c2c_text_hover_filters', array( 'the_content', 'get_the_excerpt', 'widget_text' ) );
@@ -155,10 +150,9 @@ final class c2c_TextHover extends C2C_Plugin_037 {
 	}
 
 	/**
-	 * Outputs the text above the setting form
+	 * Outputs the text above the setting form.
 	 *
-	 * @param string $localized_heading_text (optional) Localized page heading text.
-	 * @return void (Text will be echoed.)
+	 * @param string $localized_heading_text Optional. Localized page heading text.
 	 */
 	public function options_page_description( $localized_heading_text = '' ) {
 		parent::options_page_description( __( 'Text Hover Settings', $this->textdomain ) );
@@ -219,7 +213,7 @@ final class c2c_TextHover extends C2C_Plugin_037 {
 	 *
 	 * @since 3.5
 	 *
-	 * @param string $text The comment text
+	 * @param string $text The comment text.
 	 * @return string
 	 */
 	public function text_hover_comment_text( $text ) {
@@ -233,10 +227,10 @@ final class c2c_TextHover extends C2C_Plugin_037 {
 	}
 
 	/**
-	 * Perform text hover replacements
+	 * Perform text hover replacements.
 	 *
-	 * @param string $text Text to be processed for text hovers
-	 * @return string Text with hovertexts already processed
+	 * @param string  $text Text to be processed for text hovers.
+	 * @return string Text with hovertexts already processed.
 	 */
 	public function text_hover( $text ) {
 		$options        = $this->get_options();
@@ -244,25 +238,50 @@ final class c2c_TextHover extends C2C_Plugin_037 {
 		$case_sensitive = apply_filters( 'c2c_text_hover_case_sensitive', $options['case_sensitive'] );
 		$limit          = apply_filters( 'c2c_text_hover_once',           $options['replace_once'] ) ? 1 : -1;
 		$preg_flags     = $case_sensitive ? 's' : 'si';
+		$mb_regex_encoding = null;
 
 		$text = ' ' . $text . ' ';
 
-		foreach ( $text_to_hover as $old_text => $hover_text ) {
+		$can_do_mb = function_exists( 'mb_regex_encoding' ) && function_exists( 'mb_ereg_replace' ) && function_exists( 'mb_strlen' );
+
+		// Store original mb_regex_encoding and then set it to UTF-8.
+		if ( $can_do_mb ) {
+			$mb_regex_encoding = mb_regex_encoding();
+			mb_regex_encoding( 'UTF-8' );
+		}
+
+		foreach ( (array) $text_to_hover as $old_text => $hover_text ) {
 
 			if ( empty( $hover_text ) ) {
 				continue;
 			}
 
-			$old_text = preg_quote( $old_text, '|' );
-			// WILL match string within string, but WON'T match within tags
-			$new_text = "$1<acronym title='" . esc_attr( addcslashes( $hover_text, '\\$' ) ) . "'>$2</acronym>$3";
-			$text = preg_replace(
-				"|(?!<.*?)([\s\'\"\.\x98\x99\x9c\x9d\xCB\x9C\xE2\x84\xA2\xC5\x93\xEF\xBF\xBD\(\[\{])($old_text)([\s\'\"\x98\x99\x9c\x9d\xCB\x9C\xE2\x84\xA2\xC5\x93\xEF\xBF\xBD\?\!\.\,\-\+\]\)\}])(?![^<>]*?>)|$preg_flags",
-				$new_text,
-				$text,
-				$limit
-			);
+			$new_text = "\\1<acronym class='c2c-text-hover' title='" . esc_attr( addcslashes( $hover_text, '\\$' ) ) . "'>\\2</acronym>\\3";
+			$old_text = preg_quote( $old_text, '~' );
 
+			// If the string to be linked includes '&', consider '&amp;' and '&#038;' equivalents.
+			// Visual editor will convert the former, but users aren't aware of the conversion.
+			if ( false !== strpos( $old_text, '&' ) ) {
+				$old_text = str_replace( '&', '&(?:amp;|#038;)?', $old_text );
+			}
+
+			// WILL match string within string, but WON'T match within tags
+			$regex = "(?!<.*?)([\s\'\"\.\x98\x99\x9c\x9d\xCB\x9C\xE2\x84\xA2\xC5\x93\xEF\xBF\xBD\(\[\{])($old_text)([\s\'\"\x98\x99\x9c\x9d\xCB\x9C\xE2\x84\xA2\xC5\x93\xEF\xBF\xBD\?\!\.\,\-\+\]\)\}])(?![^<>]*?>)";
+
+			// If the text to be replaced has multibyte character(s), use
+			// mb_ereg_replace() if possible.
+			if ( $can_do_mb && ( strlen( $old_text ) != mb_strlen( $old_text ) ) ) {
+				// NOTE: mb_ereg_replace() does not support limiting the number of replacements.
+				$text = mb_ereg_replace( $regex, $new_text, $text, $preg_flags );
+			} else {
+				$text = preg_replace( "~{$regex}~{$preg_flags}", $new_text, $text, $limit );
+			}
+
+		}
+
+		// Restore original mb_regexp_encoding, if changed.
+		if ( $mb_regex_encoding ) {
+			mb_regex_encoding( $mb_regex_encoding );
 		}
 
 		return trim( $text );
